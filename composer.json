@@ -1,0 +1,42 @@
+{
+    "name": "pl/hyperf-admin-a",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "php",
+        "hyperf"
+    ],
+    "description": "后台管理系统，高效开发中小型系统",
+    "autoload": {
+        "psr-4": {
+            "Pl\\HyperfAdmin\\": "src/"
+        }
+    },
+    "autoload-dev": {
+    },
+    "require": {
+        "php": ">=7.2",
+        "ext-swoole": ">=4.5",
+        "hyperf/framework": "2.0.*",
+        "hyperf/di": "2.0.*"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.14",
+        "phpstan/phpstan": "^0.12",
+        "hyperf/testing": "2.0.*",
+        "swoole/ide-helper": "dev-master"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "co-phpunit -c phpunit.xml --colors=always",
+        "analyse": "phpstan analyse --memory-limit 1024M -l 0 ./src",
+        "cs-fix": "php-cs-fixer fix $1"
+    },
+    "extra": {
+        "hyperf": {
+            "config": "Pl\\HyperfAdmin\\ConfigProvider"
+        }
+    }
+}
