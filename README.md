@@ -1,5 +1,5 @@
-# component-creater
+# composer 安装
 
 ```
-composer create-project hyperf/component-creater
+composer require pl/hyperf-admin-a
 ```
