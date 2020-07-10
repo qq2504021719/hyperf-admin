@@ -12,6 +12,7 @@ use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\View\RenderInterface;
+use Pl\HyperfAdmin\Repository\TemplateEngineRepository;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -39,8 +40,9 @@ abstract class HyperfAdminController
     protected $response;
 
     /**
+     * 自定义模板解析
      * @Inject
-     * @var RenderInterface
+     * @var TemplateEngineRepository
      */
     protected $render;
 }

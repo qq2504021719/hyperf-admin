@@ -9,8 +9,10 @@
 namespace Pl\HyperfAdmin\Controllers;
 
 
+use duncan3dc\Laravel\BladeInstance;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\RequestMapping;
+use Hyperf\View\Engine\BladeEngine;
 
 /**
  * Class HomeController
@@ -32,6 +34,9 @@ class HomeController extends HyperfAdminController
         $data = [
             'name' => 'Hyperf'
         ];
+
+//        $blade = new BladeInstance(__DIR__.'/../../storage/view/',BASE_PATH.'/runtime/view/');
+//        return $blade->render('index',$data);
 
         return $this->render->render('index',$data);
     }
