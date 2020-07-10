@@ -4,6 +4,7 @@
 composer require pl/hyperf-admin
 ```
 
+
 # 配置
 
 - 1、模板缓存
@@ -27,4 +28,9 @@ return [
         'enable_static_handler' => true,
     ],
 ];
+```
+
+# 发布配置文件
+```
+php bin/hyperf.php vendor:publish pl/hyperf-admin
 ```
