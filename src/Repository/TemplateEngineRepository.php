@@ -34,7 +34,7 @@ class TemplateEngineRepository
         $blade = new BladeInstance(__DIR__.'/../../storage/view/',BASE_PATH.'/runtime/view/');
         return $this->response()
             ->withAddedHeader('content-type', 'text/html')
-            ->withBody(new SwooleStream($blade->render($template,$data)));
+            ->withBody(new SwooleStream($blade->render(ViewRepository::viewStrInit($template),$data)));
     }
 
     /**

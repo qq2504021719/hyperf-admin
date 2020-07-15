@@ -16,6 +16,8 @@ composer require pl/hyperf-admin
 
 ```
 # 扩展包almasaeed2010的下的dist、plugins复制到public/vendor里面
+# nprogress.js和nprogress.css发布到public/vendor/dist对应目录
+# 添加font-awesome.min.css和对应fonts字体
 ```
 
 - 3、配置静态资源

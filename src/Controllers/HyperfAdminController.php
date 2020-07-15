@@ -21,6 +21,8 @@ use Psr\Container\ContainerInterface;
  */
 abstract class HyperfAdminController
 {
+    protected $title = '';
+
     /**
      * @Inject
      * @var ContainerInterface
