@@ -20,6 +20,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- 页面进度条 -->
     <link href="{{config('hyperf-admin.app_host')}}/public/vendor/dist/css/nprogress.css" rel="stylesheet">
     <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/dist/css/font-awesome.min.css">
+
+    <!-- DataTables start -->
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <!-- DataTables end -->
+
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="bar" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>
@@ -50,8 +56,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
-{{--<script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/jquery/jquery.min.js"></script>--}}
-<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery pjax -->
 <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/jquery/jquery.pjax.min.js"></script>
 <!-- 页面进度条 -->
@@ -60,7 +65,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/adminlte.min.js"></script>
-
+<!-- 帮助方法 -->
+<script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/functions.js"></script>
 <script>
 // 路由前缀
 var routePrefix = "{{$config['prefix']}}";
@@ -193,15 +199,26 @@ $(document).on('pjax:end', function() {
     pjaxDone();
 })
 
-// 刷新指定页面
-function viewFaRe(path) {
-    if(path == '')
+/**
+ * 刷新指定页面
+ * @param path
+ * @param type 1 刷新当前页面 2刷新指定页面
+ */
+function viewFaRe(path,type) {
+    var search = getQueryVariable(path);
+    if(path == '' && type == 1)
     {
-        path = window.location.pathname;
+        // 替换
+        path = window.location.pathname+search;
+    }else if(type == 2)
+    {
+        path = window.location.pathname+search;
+
     }
     // pjax刷新当前页
     $.pjax({url: path, container: '#content-wrapper'})
 }
+
 
 
 // 菜单选中初始化

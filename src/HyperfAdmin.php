@@ -8,6 +8,7 @@
 
 namespace Pl\HyperfAdmin;
 
+use Pl\HyperfAdmin\Model\HyperfAdminModel;
 use Pl\HyperfAdmin\Repository\TemplateEngineRepository;
 
 class HyperfAdmin
@@ -41,6 +42,12 @@ class HyperfAdmin
      */
     public $isIndex = false;
 
+    /**
+     * 模型
+     * @var
+     */
+    public $model;
+
 
     /**
      * 副标题
@@ -48,9 +55,11 @@ class HyperfAdmin
      */
     public $subTitle;
 
-    public function __construct()
+    public function __construct(HyperfAdminModel $model)
     {
         $this->render = new TemplateEngineRepository();
+        $this->model = $model->newModelQuery();
+
     }
 
     /**

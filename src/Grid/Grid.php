@@ -2,6 +2,8 @@
 namespace Pl\HyperfAdmin\Grid;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Pl\HyperfAdmin\HyperfAdmin;
+use Pl\HyperfAdmin\Lib\Functions;
+use Pl\HyperfAdmin\Model\HyperfAdminModel;
 use Pl\HyperfAdmin\Repository\ViewRepository;
 
 /**
@@ -13,10 +15,133 @@ use Pl\HyperfAdmin\Repository\ViewRepository;
 
 class Grid extends HyperfAdmin
 {
+    use Functions;
 
-    public function __construct()
+    /**
+     * 列集合
+     * @var array
+     */
+    private $columns = [];
+
+    /**
+     * 处理字段
+     * @var array
+     */
+    private $fields = [];
+
+    /**
+     * 行集合
+     * @var array
+     */
+    private $rows = [];
+
+    /**
+     * 页面内容
+     * @var
+     */
+    private $html;
+
+    /**
+     *  分页html
+     * @var
+     */
+    private $pageHtml;
+
+    /**
+     * 查询数据
+     * @var
+     */
+    private $data;
+
+    public function __construct(HyperfAdminModel $model)
     {
-        parent::__construct();
+        parent::__construct($model);
+    }
+
+
+    /**
+     * 列信息设置
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/16
+     * Time: 11:04
+     * @param $name
+     * @param string $label
+     * @return Column
+     */
+    public function column($name,$label = '',$type = 'string')
+    {
+        $column = new Column($name,$label,$type);
+
+        $this->fields[$name] = $label;
+        $this->columns[$name] = $column;
+        return $column;
+    }
+
+    /**
+     * 数据查询
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/16
+     * Time: 11:56
+     * @param RequestInterface $request
+     */
+    private function getData(RequestInterface $request)
+    {
+        $params = $request->all();
+        $page = $this->arrIsKey($params,'page',1);
+        $paginate = $this->arrIsKey($params,'paginate',10);
+
+        if(count($this->fields))
+        {
+            $modelQuery = '';
+            $modelQuery = $this->model;
+
+            // 查询记录总数
+            $count = $modelQuery->count();
+
+            // 分页数据
+            $this->pageHtml = new Page($page,$paginate,$count);
+
+            // 查询数据
+            $this->data = $modelQuery->limit($paginate)->offset(($page-1)*$paginate)->get();
+
+            unset($modelQuery);
+        }
+
+    }
+
+    /**
+     * 表格内容数据格式化
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/17
+     * Time: 11:38
+     */
+    private function tableDataInit()
+    {
+        if(count($this->data))
+        {
+            foreach ($this->data as $k=>$v)
+            {
+                $columns = [];
+                $data = [];
+                // 处理一行里面每一列的数据
+                foreach ($this->fields as $key=>$value)
+                {
+                    $column = '';
+                    $column = $this->columns[$key];
+                    // 设置html
+                    $column->setHtml($v);
+                    $this->columns[$key] = $column;
+                    // 列html存储数组
+                    $data[$key] = $column->getHtml();
+                }
+                $row = new Row();
+                $row->html = $data;
+                $this->rows[$k] = $row;
+            }
+        }
     }
 
 
@@ -28,21 +153,38 @@ class Grid extends HyperfAdmin
      * User: EricPan
      * Date: 2020/7/15
      * Time: 14:33
-     * @return \Psr\Http\Message\ResponseInterface
      */
     private function contentHeader()
     {
         // 面包屑初始化
         $this->breadcrumbInit();
-//        $html = $this->render->render('content.header',);
 
         $html = ViewRepository::viewInitLineCom('content.header',[
             'title' => $this->title,
             'subTitle' => $this->subTitle,
             'breadcrumb' => $this->breadcrumb
         ]);
+        $this->html .= $html;
+    }
 
-        return $html;
+    /**
+     * 表格内容
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/16
+     * Time: 11:06
+     */
+    private function contentTable()
+    {
+        $html = ViewRepository::viewInitLineCom('content.table',[
+            'fields' => $this->fields,
+            'rows' => $this->rows,
+            'pageHtml' => $this->pageHtml
+        ]);
+        $this->html .= $html;
+        $this->fields = [];
+        $this->rows = [];
+        $this->pageHtml = [];
     }
 
     /**
@@ -55,13 +197,17 @@ class Grid extends HyperfAdmin
      */
     public function html(RequestInterface $request)
     {
-        $html = '';
+        // 头部信息
+        $this->contentHeader();
+        // 表格内容查询
+        $this->getData($request);
+        // 表格内容数据格式化
+        if(count($this->data)) $this->tableDataInit();
+        // 表格分页html初始化
+        if($this->pageHtml) $this->pageHtml->pageInit();
+        // 表格内容
+        $this->contentTable();
 
-        $contentHeaderHtml = $this->contentHeader();
-
-
-        $html .= $contentHeaderHtml;
-
-        return ViewRepository::viewInitLine($request,$html);
+        return ViewRepository::viewInitLine($request,$this->html);
     }
 }

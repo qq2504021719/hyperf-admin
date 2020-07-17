@@ -1,0 +1,1 @@
+<td class="sorting_1 dtr-control"><img src="{{$path}}" alt="Photo 1" {{$widht>0?'width='.$widht:''}} {{$height>0?'height='.$height:''}} class="img-fluid"></td>

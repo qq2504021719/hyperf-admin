@@ -6,7 +6,7 @@
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="javascript:void(0)" role="button" onclick="viewFaRe('')">
+            <a class="nav-link" href="javascript:void(0)" role="button" onclick="viewFaRe('',1)">
                 <i class="" id="view-fa-refresh" aria-hidden="true"></i>&nbsp;刷新</a>
         </li>
         <script>

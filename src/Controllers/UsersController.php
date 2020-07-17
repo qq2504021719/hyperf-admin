@@ -13,6 +13,7 @@ namespace Pl\HyperfAdmin\Controllers;
 use App\Controller\AbstractController;
 use Pl\HyperfAdmin\Grid\Grid;
 use Pl\HyperfAdmin\HyperfAdmin;
+use Pl\HyperfAdmin\Model\AdminUsers;
 use Pl\HyperfAdmin\Repository\ViewRepository;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\RequestMapping;
@@ -69,10 +70,16 @@ class UsersController extends HyperfAdminController
      */
     public function index()
     {
-        $grid = new Grid();
+        $grid = new Grid(new AdminUsers());
         $grid->isIndex = true;
         $this->breadcrumb = [];
         $this->subTitle = '列表';
+
+        $grid->column('id','ID');
+        $grid->column('avatar','头像')->image('',50,50);
+        $grid->column('name','昵称');
+        $grid->column('username','账号');
+        $grid->column('created_at','创建时间');
 
 
         $this->initData($grid);
@@ -90,7 +97,7 @@ class UsersController extends HyperfAdminController
     public function add()
     {
 
-        $grid = new Grid();
+        $grid = new Grid(new AdminUsers());
         $this->breadcrumb = [
             [
                 'path' => '/users/add',
@@ -99,6 +106,11 @@ class UsersController extends HyperfAdminController
             ]
         ];
         $this->subTitle = '添加';
+
+        $grid->column('avatar','头像');
+        $grid->column('name','昵称');
+        $grid->column('username','账号');
+        $grid->column('created_at','创建时间');
 
         $this->initData($grid);
         return $grid->html($this->request);
@@ -114,7 +126,7 @@ class UsersController extends HyperfAdminController
      */
     public function edit()
     {
-        $grid = new Grid();
+        $grid = new Grid(new AdminUsers());
         $this->breadcrumb = [
             [
                 'path' => '/users/edit',
