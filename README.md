@@ -36,3 +36,7 @@ return [
 ```
 php bin/hyperf.php vendor:publish pl/hyperf-admin
 ```
+
+# 待办
+1.`Grid.php/setSearchHtml`方法优化
+2.继续添加搜索方法
