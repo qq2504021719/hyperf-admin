@@ -75,6 +75,10 @@ class UsersController extends HyperfAdminController
         $this->breadcrumb = [];
         $this->subTitle = '列表';
 
+        $grid->search('name','昵称','like');
+
+
+
         $grid->column('id','ID');
         $grid->column('avatar','头像')->image('',50,50);
         $grid->column('name','昵称');

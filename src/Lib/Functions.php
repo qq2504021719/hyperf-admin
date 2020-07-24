@@ -37,4 +37,18 @@ trait Functions
         }
         return $re;
     }
+
+
+    /**
+     * 获取随机生成id
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/24
+     * Time: 11:22
+     * @return string
+     */
+    function getID()
+    {
+        return time().mt_rand(1,100000).mt_rand(1,100000);
+    }
 }

@@ -124,7 +124,7 @@ class Column
                 break;
             case 'image':
                 $strHtml = ViewRepository::viewInitLineCom('content.image',[
-                   'path' => $this->imgPath==""?$str:$this->imgPath,
+                   'path' => $this->imgPath==""?$str:$this->imgPath.$str,
                    'widht' => $this->imgWidht,
                    'height' => $this->imgHeight
                 ]);

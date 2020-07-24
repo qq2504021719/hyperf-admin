@@ -36,22 +36,34 @@ class Grid extends HyperfAdmin
     private $rows = [];
 
     /**
+     * 搜索集合
+     * @var array
+     */
+    private $searchs = [];
+
+    /**
+     * 搜索html
+     * @var
+     */
+    private $searchHtml = '';
+
+    /**
      * 页面内容
      * @var
      */
-    private $html;
+    private $html = '';
 
     /**
      *  分页html
      * @var
      */
-    private $pageHtml;
+    private $pageHtml = '';
 
     /**
      * 查询数据
      * @var
      */
-    private $data;
+    private $data = [];
 
     public function __construct(HyperfAdminModel $model)
     {
@@ -79,6 +91,113 @@ class Grid extends HyperfAdmin
     }
 
     /**
+     * 查询信息设置
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/24
+     * Time: 10:46
+     * @param $name
+     * @param $label
+     * @param string $con
+     * @param string $data
+     * @return Search
+     */
+    public function search($name,$label,$con = '=',$data = '')
+    {
+        $search = new Search($name,$label,$con,$data);
+        $this->searchs[] = $search;
+        return $search;
+    }
+
+    /**
+     * 设置搜索html
+     * 设置搜索条件
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/24
+     * Time: 10:56
+     * @param RequestInterface $request
+     */
+    private function setSearchHtml(RequestInterface $request)
+    {
+        $params = $request->all();
+        $page = $this->arrIsKey($params,'page',1);
+        $paginate = $this->arrIsKey($params,'paginate',10);
+
+        $id = $this->getID();
+
+        $htmls = '';
+        if(count($this->searchs))
+        {
+            // html开始
+            $htmls = '<div class="card"><div class="card-body"><form method="get" id="'.$id.'" action="">';
+
+
+            // 隐藏域内容
+            $htmls .= '<input name="paginate" value="'.$paginate.'" type="hidden"><input name="page" value="'.$page.'" type="hidden">';
+
+            $i = 0;
+            foreach ($this->searchs as $k=>$v)
+            {
+
+                // 设置默认值
+                $v->data = $this->arrIsKey($params,$v->name,'');
+
+                // 查询条件处理
+                $this->model = $v->queryInit($this->model);
+
+                // html处理
+                if($i == 0) $htmls .= '<div class="row">';
+                $htmls .= $v->getHtml();
+                $i++;
+                if($i == 3 || (count($this->searchs)-1) == $k)
+                {
+                    $i = 0;
+                    $htmls .= '</div>';
+                }
+
+            }
+
+            // html结束
+            $htmls .= '<button type="button" onclick="getElements('."'".$id."'".')" class="btn btn-primary float-right">查询</button></form></div></div>';
+
+            // script
+            $htmls .= <<<EOT
+            <script>
+/**
+* 获取对应form里面的值
+ * @param formId
+*/            
+function getElements(formId) {  
+  var form = document.getElementById(formId);  
+  var str = '';
+  // var elements = new Array();  
+  var tagElements = form.getElementsByTagName('input');  
+  for (var j = 0; j < tagElements.length; j++){ 
+     // elements.push(tagElements[j].valueOf()); 
+     console.log(tagElements[j].name);
+     console.log(tagElements[j].value);
+     var name = tagElements[j].name;
+     var value = tagElements[j].value;
+     if(str == '')
+     {
+         str += name+"="+value;
+     }
+     else 
+     {
+         str += "&"+name+"="+value;
+     }
+  } 
+  viewFaRe(str,2);
+}  
+</script>
+EOT;
+
+        }
+        $this->searchHtml = $htmls;
+    }
+
+    /**
      * 数据查询
      * Created by PhpStorm.
      * User: EricPan
@@ -102,6 +221,7 @@ class Grid extends HyperfAdmin
 
             // 分页数据
             $this->pageHtml = new Page($page,$paginate,$count);
+
 
             // 查询数据
             $this->data = $modelQuery->limit($paginate)->offset(($page-1)*$paginate)->get();
@@ -177,6 +297,7 @@ class Grid extends HyperfAdmin
     private function contentTable()
     {
         $html = ViewRepository::viewInitLineCom('content.table',[
+            'searchHtml' => $this->searchHtml,
             'fields' => $this->fields,
             'rows' => $this->rows,
             'pageHtml' => $this->pageHtml
@@ -199,6 +320,8 @@ class Grid extends HyperfAdmin
     {
         // 头部信息
         $this->contentHeader();
+        // 搜索内容初始化
+        $this->setSearchHtml($request);
         // 表格内容查询
         $this->getData($request);
         // 表格内容数据格式化

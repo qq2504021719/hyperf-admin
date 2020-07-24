@@ -13,18 +13,62 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/fontawesome-free/css/all.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/dist/css/adminlte.min.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <!-- 页面进度条 -->
-    <link href="{{config('hyperf-admin.app_host')}}/public/vendor/dist/css/nprogress.css" rel="stylesheet">
     <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/dist/css/font-awesome.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/fontawesome-free/css/all.min.css">
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Bootstrap Color Picker -->
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 
     <!-- DataTables start -->
     <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <!-- DataTables end -->
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/daterangepicker/daterangepicker.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/dist/css/adminlte.min.css">
+    <!-- Bootstrap4 Duallistbox -->
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+
+
+    <!-- jQuery -->
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery pjax -->
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/jquery/jquery.pjax.min.js"></script>
+    <!-- 页面进度条 -->
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/nprogress.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- 帮助方法 -->
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/functions.js"></script>
+    <!-- Select2 -->
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/select2/js/select2.full.min.js"></script>
+    <!-- Bootstrap4 Duallistbox -->
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+    <!-- InputMask -->
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/moment/moment.min.js"></script>
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/inputmask/jquery.inputmask.min.js"></script>
+    <!-- date-range-picker -->
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- bootstrap color picker -->
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Bootstrap Switch -->
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/adminlte.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    {{--<script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/demo.js"></script>--}}
 
 </head>
 <body class="hold-transition sidebar-mini">
@@ -55,19 +99,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- REQUIRED SCRIPTS -->
 
-<!-- jQuery -->
-<script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/jquery/jquery.min.js"></script>
-<!-- jQuery pjax -->
-<script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/jquery/jquery.pjax.min.js"></script>
-<!-- 页面进度条 -->
-<script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/nprogress.js"></script>
-<!-- Bootstrap 4 -->
-<script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/adminlte.min.js"></script>
-<!-- 帮助方法 -->
-<script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/functions.js"></script>
+
 <script>
+
 // 路由前缀
 var routePrefix = "{{$config['prefix']}}";
 
@@ -224,6 +258,9 @@ function viewFaRe(path,type) {
 // 菜单选中初始化
 navInit();
 // #################### jquery pjax end ####################
+
+
+
 </script>
 
 </html>
