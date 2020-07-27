@@ -31,7 +31,6 @@ class SearchHtml
         $params = $request->all();
         $page = $this->arrIsKey($params,'page',1);
         $paginate = $this->arrIsKey($params,'paginate',10);
-
         $id = $this->getID();
 
         $htmls = '';
@@ -83,11 +82,11 @@ function getElements(formId) {
   var tagElements = form.getElementsByTagName('input');  
   for (var j = 0; j < tagElements.length; j++){ 
      // elements.push(tagElements[j].valueOf()); 
-     console.log(tagElements[j].name);
-     console.log(tagElements[j].value);
+     // console.log(tagElements[j].name);
+     // console.log(tagElements[j].value);
      var name = tagElements[j].name;
      var value = tagElements[j].value;
-     if(name != '')
+     if(name != '' && value != '')
      {
          if(str == '')
          {
@@ -100,7 +99,7 @@ function getElements(formId) {
      }
 
   } 
-  console.log(str)
+  console.log("search-form参数组合GET参数:"+str)
   viewFaRe(str,2);
 }  
 </script>

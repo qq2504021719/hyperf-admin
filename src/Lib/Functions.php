@@ -51,4 +51,18 @@ trait Functions
     {
         return time().mt_rand(1,100000).mt_rand(1,100000);
     }
+
+    /**
+     * 请求外部接口日志 ApplicationContext
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/6/22
+     * Time: 16:34
+     * @param $data
+     */
+    function log_hyperfadmin($data,$name = 'log')
+    {
+        $log =  \Hyperf\Utils\ApplicationContext::getContainer()->get(\Hyperf\Logger\LoggerFactory::class)->get($name,'hyperfadmin');
+        $log->info($data);
+    }
 }

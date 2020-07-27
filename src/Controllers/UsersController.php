@@ -76,7 +76,7 @@ class UsersController extends HyperfAdminController
         $this->breadcrumb = [];
         $this->subTitle = '列表';
 
-        $grid->search('name','昵称','like');
+        $grid->search('name','昵称',StateRepository::SEARCH_LIKE);
         $grid->search('created_at','创建时间',StateRepository::SEARCH_TIME_BETWEEN);
 
 

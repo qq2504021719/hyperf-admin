@@ -62,19 +62,22 @@ class Search
     {
         switch ($this->con)
         {
-            case 'like':
+            case StateRepository::SEARCH_LIKE:
                 if($this->data) {
                     $query->where($this->name,'like',"%".$this->data."%");
                 }
                 break;
-            case '=':
+            case StateRepository::SEARCH_EQUAL:
                 if($this->data) $query->where($this->name,$this->data);
-            case '>':
+            case StateRepository::SEARCH_NOT_EQUAL:
+                if($this->data) $query->where($this->name,'<>',$this->data);
+                break;
+            case StateRepository::SEARCH_G_THAN:
                 if($this->data) $query->where($this->name,'>',$this->data);
-            case '<':
+            case StateRepository::SEARCH_E_THAN:
                 if($this->data) $query->where($this->name,'<',$this->data);
             case StateRepository::SEARCH_TIME_BETWEEN:
-                if(is_array($this->data) && count($this->data)) $query->whereBetween($this->name,$this->data);
+                if(is_array($this->data) && count($this->data) && $this->data[0] && $this->data[1]) $query->whereBetween($this->name,$this->data);
                 break;
         }
 
@@ -94,19 +97,19 @@ class Search
         $html = '';
         switch ($this->con)
         {
-            case 'like':
+            case StateRepository::SEARCH_LIKE:
                 $html = $this->getTextHtml();
                 break;
-            case '=':
+            case StateRepository::SEARCH_EQUAL:
                 $html = $this->getTextHtml();
                 break;
-            case '<>':
+            case StateRepository::SEARCH_NOT_EQUAL:
                 $html = $this->getTextHtml();
                 break;
-            case '>':
+            case StateRepository::SEARCH_G_THAN:
                 $html = $this->getTextHtml();
                 break;
-            case '<':
+            case StateRepository::SEARCH_E_THAN:
                 $html = $this->getTextHtml();
                 break;
             case StateRepository::SEARCH_TIME_BETWEEN:

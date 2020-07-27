@@ -10,6 +10,26 @@ composer require pl/hyperf-admin
 - 1、模板缓存
 ```
 # runtime/view/目录不存在创建
+
+# 日志配置
+'hyperfadmin' => [
+    'handler' => [
+        'class' => Monolog\Handler\RotatingFileHandler::class,
+        'constructor' => [
+            'filename' => BASE_PATH . '/runtime/logs/hyperfadmin/hyperfadmin.log',
+            'level' => Monolog\Logger::DEBUG,
+        ],
+    ],
+    'formatter' => [
+        'class' => Monolog\Formatter\LineFormatter::class,
+        'constructor' => [
+            'format' => null,
+            'dateFormat' => null,
+            'allowInlineLineBreaks' => true,
+        ],
+    ],
+],
+
 ```
 
 - 2、静态资源
@@ -36,6 +56,7 @@ return [
 ```
 php bin/hyperf.php vendor:publish pl/hyperf-admin
 ```
+
 
 # 待办
 1.`Grid.php/setSearchHtml`方法优化

@@ -233,27 +233,6 @@ $(document).on('pjax:end', function() {
     pjaxDone();
 })
 
-/**
- * 刷新指定页面
- * @param path
- * @param type 1 刷新当前页面 2刷新指定页面
- */
-function viewFaRe(path,type) {
-    var search = getQueryVariable(path);
-    if(path == '' && type == 1)
-    {
-        // 替换
-        path = window.location.pathname+search;
-    }else if(type == 2)
-    {
-        path = window.location.pathname+search;
-
-    }
-    // pjax刷新当前页
-    $.pjax({url: path, container: '#content-wrapper'})
-}
-
-
 
 // 菜单选中初始化
 navInit();
