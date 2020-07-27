@@ -41,12 +41,34 @@ class Search
      */
     public $con;
 
+
+    /**
+     * select2数据
+     * @var
+     */
+    private $select2Data;
+
     public function __construct($name,$label,$con = '=',$data = '')
     {
         $this->name = $name;
         $this->label = $label;
         $this->con = $con;
         $this->data = $data;
+    }
+
+    /**
+     * select2数据设置
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/27
+     * Time: 17:38
+     * @param $data
+     * @return $this
+     */
+    public function option($data)
+    {
+        $this->select2Data = $data;
+        return $this;
     }
 
     /**
@@ -78,6 +100,9 @@ class Search
                 if($this->data) $query->where($this->name,'<',$this->data);
             case StateRepository::SEARCH_TIME_BETWEEN:
                 if(is_array($this->data) && count($this->data) && $this->data[0] && $this->data[1]) $query->whereBetween($this->name,$this->data);
+                break;
+            case StateRepository::SEARCH_SELETE2:
+                if($this->data) $query->where($this->name,$this->data);
                 break;
         }
 
@@ -114,6 +139,9 @@ class Search
                 break;
             case StateRepository::SEARCH_TIME_BETWEEN:
                 $html = $this->getTimeBetween();
+                break;
+            case StateRepository::SEARCH_SELETE2:
+                $html = $this->getSelect2Html();
                 break;
         }
         return $html;
@@ -157,5 +185,23 @@ class Search
         return $strHtml;
     }
 
-    
+    /**
+     * select2选择框html
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/27
+     * Time: 17:41
+     * @return mixed
+     */
+    private function getSelect2Html()
+    {
+        $strHtml = ViewRepository::viewInitLineCom('content.search.select2',[
+            'name' => $this->name,
+            'label' => $this->label,
+            'data' => $this->data,
+            'option' => $this->select2Data,
+            'place' => '请选择'.$this->label,
+        ]);
+        return $strHtml;
+    }
 }
