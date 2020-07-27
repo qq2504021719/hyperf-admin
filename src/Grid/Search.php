@@ -10,6 +10,7 @@ namespace Pl\HyperfAdmin\Grid;
 
 
 use MongoDB\Driver\Query;
+use Pl\HyperfAdmin\Repository\StateRepository;
 use Pl\HyperfAdmin\Repository\ViewRepository;
 
 class Search
@@ -68,6 +69,12 @@ class Search
                 break;
             case '=':
                 if($this->data) $query->where($this->name,$this->data);
+            case '>':
+                if($this->data) $query->where($this->name,'>',$this->data);
+            case '<':
+                if($this->data) $query->where($this->name,'<',$this->data);
+            case StateRepository::SEARCH_TIME_BETWEEN:
+                if(is_array($this->data) && count($this->data)) $query->whereBetween($this->name,$this->data);
                 break;
         }
 
@@ -102,6 +109,9 @@ class Search
             case '<':
                 $html = $this->getTextHtml();
                 break;
+            case StateRepository::SEARCH_TIME_BETWEEN:
+                $html = $this->getTimeBetween();
+                break;
         }
         return $html;
     }
@@ -124,4 +134,25 @@ class Search
         ]);
         return $strHtml;
     }
+
+    /**
+     * 时间区间html
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/27
+     * Time: 14:59
+     * @return mixed
+     */
+    private function getTimeBetween()
+    {
+        $strHtml = ViewRepository::viewInitLineCom('content.search.timebetween',[
+            'name' => $this->name,
+            'label' => $this->label,
+            'data' => $this->data,
+            'place' => '请选择'.$this->label.'的开始时间 ~ 结束时间',
+        ]);
+        return $strHtml;
+    }
+
+    
 }

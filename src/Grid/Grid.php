@@ -65,11 +65,28 @@ class Grid extends HyperfAdmin
      */
     private $data = [];
 
+    /**
+     * 组件显示隐藏
+     * export 导出
+     * @var array
+     */
+    private $isShow = [
+        'export' => true,
+    ];
+
     public function __construct(HyperfAdminModel $model)
     {
         parent::__construct($model);
     }
 
+    /**
+     * 组件显示隐藏
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/27
+     * Time: 14:20
+     */
+    public function displayExport(){ $this->isShow['export'] = false;}
 
     /**
      * 列信息设置
@@ -118,83 +135,12 @@ class Grid extends HyperfAdmin
      * Time: 10:56
      * @param RequestInterface $request
      */
-    private function setSearchHtml(RequestInterface $request)
+    private function searchInit(RequestInterface $request)
     {
-        $params = $request->all();
-        $page = $this->arrIsKey($params,'page',1);
-        $paginate = $this->arrIsKey($params,'paginate',10);
-
-        $id = $this->getID();
-
-        $htmls = '';
-        if(count($this->searchs))
-        {
-            // html开始
-            $htmls = '<div class="card"><div class="card-body"><form method="get" id="'.$id.'" action="">';
-
-
-            // 隐藏域内容
-            $htmls .= '<input name="paginate" value="'.$paginate.'" type="hidden"><input name="page" value="'.$page.'" type="hidden">';
-
-            $i = 0;
-            foreach ($this->searchs as $k=>$v)
-            {
-
-                // 设置默认值
-                $v->data = $this->arrIsKey($params,$v->name,'');
-
-                // 查询条件处理
-                $this->model = $v->queryInit($this->model);
-
-                // html处理
-                if($i == 0) $htmls .= '<div class="row">';
-                $htmls .= $v->getHtml();
-                $i++;
-                if($i == 3 || (count($this->searchs)-1) == $k)
-                {
-                    $i = 0;
-                    $htmls .= '</div>';
-                }
-
-            }
-
-            // html结束
-            $htmls .= '<button type="button" onclick="getElements('."'".$id."'".')" class="btn btn-primary float-right">查询</button></form></div></div>';
-
-            // script
-            $htmls .= <<<EOT
-            <script>
-/**
-* 获取对应form里面的值
- * @param formId
-*/            
-function getElements(formId) {  
-  var form = document.getElementById(formId);  
-  var str = '';
-  // var elements = new Array();  
-  var tagElements = form.getElementsByTagName('input');  
-  for (var j = 0; j < tagElements.length; j++){ 
-     // elements.push(tagElements[j].valueOf()); 
-     console.log(tagElements[j].name);
-     console.log(tagElements[j].value);
-     var name = tagElements[j].name;
-     var value = tagElements[j].value;
-     if(str == '')
-     {
-         str += name+"="+value;
-     }
-     else 
-     {
-         str += "&"+name+"="+value;
-     }
-  } 
-  viewFaRe(str,2);
-}  
-</script>
-EOT;
-
-        }
-        $this->searchHtml = $htmls;
+        $searchHtml = new SearchHtml();
+        $re = $searchHtml->htmlInit($request,$this->model,$this->searchs);
+        $this->model = $this->arrIsKey($re,'model');
+        $this->searchHtml = $this->arrIsKey($re,'html');
     }
 
     /**
@@ -282,7 +228,7 @@ EOT;
         $html = ViewRepository::viewInitLineCom('content.header',[
             'title' => $this->title,
             'subTitle' => $this->subTitle,
-            'breadcrumb' => $this->breadcrumb
+            'breadcrumb' => $this->breadcrumb,
         ]);
         $this->html .= $html;
     }
@@ -300,7 +246,9 @@ EOT;
             'searchHtml' => $this->searchHtml,
             'fields' => $this->fields,
             'rows' => $this->rows,
-            'pageHtml' => $this->pageHtml
+            'pageHtml' => $this->pageHtml,
+            'isShow' => $this->isShow
+
         ]);
         $this->html .= $html;
         $this->fields = [];
@@ -321,7 +269,7 @@ EOT;
         // 头部信息
         $this->contentHeader();
         // 搜索内容初始化
-        $this->setSearchHtml($request);
+        $this->searchInit($request);
         // 表格内容查询
         $this->getData($request);
         // 表格内容数据格式化

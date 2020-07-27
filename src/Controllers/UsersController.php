@@ -14,6 +14,7 @@ use App\Controller\AbstractController;
 use Pl\HyperfAdmin\Grid\Grid;
 use Pl\HyperfAdmin\HyperfAdmin;
 use Pl\HyperfAdmin\Model\AdminUsers;
+use Pl\HyperfAdmin\Repository\StateRepository;
 use Pl\HyperfAdmin\Repository\ViewRepository;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\RequestMapping;
@@ -76,7 +77,7 @@ class UsersController extends HyperfAdminController
         $this->subTitle = '列表';
 
         $grid->search('name','昵称','like');
-
+        $grid->search('created_at','创建时间',StateRepository::SEARCH_TIME_BETWEEN);
 
 
         $grid->column('id','ID');

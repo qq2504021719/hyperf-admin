@@ -9,7 +9,9 @@
             {{--表格数据--}}
             <div class="card">
             <div class="card-header">
-                <a href="#" class="btn btn-primary"><i class="fa fa-download"></i> 导出</a>
+                @if($isShow['export'])
+                    <a href="#" class="btn btn-primary"><i class="fa fa-download"></i> 导出</a>
+                @endif
             </div>
             <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
