@@ -76,12 +76,14 @@ class UsersController extends HyperfAdminController
         $this->breadcrumb = [];
         $this->subTitle = '列表';
 
+        $url = '/admin/api/admin_list';
         $grid->search('name','昵称',StateRepository::SEARCH_LIKE);
         $grid->search('created_at','创建时间',StateRepository::SEARCH_TIME_BETWEEN);
         $grid->search('username','角色',StateRepository::SEARCH_SELETE2)->option([
             'admin' => '系统管理员',
             '订单管理员' => '普通管理员'
         ]);
+        $grid->search('id','管理员',StateRepository::SEARCH_SELETE2_AJAX)->ajax($url);
 
 
         $grid->column('id','ID');

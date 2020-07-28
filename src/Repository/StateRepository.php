@@ -21,4 +21,5 @@ class StateRepository
     const SEARCH_EQUAL              = '=';
     const SEARCH_TIME_BETWEEN       = 'time_between';
     const SEARCH_SELETE2            = 'select';
+    const SEARCH_SELETE2_AJAX       = 'select_ajax';
 }

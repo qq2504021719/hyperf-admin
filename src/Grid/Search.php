@@ -48,6 +48,19 @@ class Search
      */
     private $select2Data;
 
+
+    /**
+     * select2数据-ajax加载地址
+     * @var
+     */
+    private $selectAjaxUrl;
+
+    /**
+     * select2数据-ajax加载-每页数量
+     * @var int
+     */
+    private $selectAjaxPaginate = 10;
+
     public function __construct($name,$label,$con = '=',$data = '')
     {
         $this->name = $name;
@@ -68,6 +81,36 @@ class Search
     public function option($data)
     {
         $this->select2Data = $data;
+        return $this;
+    }
+
+    /**
+     * select2数据-ajax加载地址设置
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/28
+     * Time: 9:54
+     * @param $url
+     * @return $this
+     */
+    public function ajax($url)
+    {
+        $this->selectAjaxUrl = $url;
+        return $this;
+    }
+
+    /**
+     * select2数据-ajax加载-每页数量-设置
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/28
+     * Time: 10:32
+     * @param $num
+     * @return $this
+     */
+    public function AjaxPaginate($num)
+    {
+        $this->selectAjaxPaginate = $num;
         return $this;
     }
 
@@ -102,6 +145,9 @@ class Search
                 if(is_array($this->data) && count($this->data) && $this->data[0] && $this->data[1]) $query->whereBetween($this->name,$this->data);
                 break;
             case StateRepository::SEARCH_SELETE2:
+                if($this->data) $query->where($this->name,$this->data);
+                break;
+            case StateRepository::SEARCH_SELETE2_AJAX:
                 if($this->data) $query->where($this->name,$this->data);
                 break;
         }
@@ -142,6 +188,9 @@ class Search
                 break;
             case StateRepository::SEARCH_SELETE2:
                 $html = $this->getSelect2Html();
+                break;
+            case StateRepository::SEARCH_SELETE2_AJAX:
+                $html = $this->getSelect2AjaxHtml();
                 break;
         }
         return $html;
@@ -201,6 +250,29 @@ class Search
             'data' => $this->data,
             'option' => $this->select2Data,
             'place' => '请选择'.$this->label,
+        ]);
+        return $strHtml;
+    }
+
+    /**
+     * select2选择框html
+     * 数据ajax加载版
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/28
+     * Time: 9:52
+     * @return mixed
+     */
+    private function getSelect2AjaxHtml()
+    {
+        $strHtml = ViewRepository::viewInitLineCom('content.search.select2_ajax',[
+            'name' => $this->name,
+            'label' => $this->label,
+            'data' => $this->data,
+            'option' => $this->select2Data,
+            'place' => '请选择'.$this->label,
+            'url' => $this->selectAjaxUrl,
+            'paginate' => $this->selectAjaxPaginate,
         ]);
         return $strHtml;
     }
