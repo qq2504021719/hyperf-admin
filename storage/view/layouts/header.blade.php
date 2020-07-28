@@ -7,7 +7,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" href="javascript:void(0)" role="button" onclick="viewFaRe('',1)">
-                <i class="" id="view-fa-refresh" aria-hidden="true"></i>&nbsp;刷新</a>
+                <i class="fas fa-refresh" id="view-fa-refresh" aria-hidden="true"></i></a>
         </li>
         <script>
         </script>

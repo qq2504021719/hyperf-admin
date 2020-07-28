@@ -65,4 +65,31 @@ trait Functions
         $log =  \Hyperf\Utils\ApplicationContext::getContainer()->get(\Hyperf\Logger\LoggerFactory::class)->get($name,'hyperfadmin');
         $log->info($data);
     }
+
+    /**
+     * 路由前缀拼接
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/28
+     * Time: 10:55
+     * @param $url
+     * @return string
+     */
+    public function getUrl($url)
+    {
+        return '/'.config('hyperf-admin.route.prefix').'/'.$url;
+    }
+
+    /**
+     * public路径
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/28
+     * Time: 13:22
+     * @return string
+     */
+    public function getPublic()
+    {
+        return config('hyperf-admin.app_host').'/public/';
+    }
 }

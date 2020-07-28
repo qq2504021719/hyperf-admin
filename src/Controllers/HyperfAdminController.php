@@ -47,4 +47,20 @@ abstract class HyperfAdminController
      * @var TemplateEngineRepository
      */
     protected $render;
+
+
+
+    /**
+     * 路由前缀拼接
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/28
+     * Time: 10:55
+     * @param $url
+     * @return string
+     */
+//    public function getUrl($url)
+//    {
+//        return '/'.config('hyperf-admin.route.prefix').'/'.$url;
+//    }
 }

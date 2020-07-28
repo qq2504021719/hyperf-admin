@@ -74,6 +74,18 @@ class Grid extends HyperfAdmin
         'export' => true,
     ];
 
+    /**
+     * excel导出url
+     * @var string
+     */
+    public $excelUrl = '';
+
+    /**
+     * 查询参数
+     * @var RequestInterface
+     */
+    private $request;
+
     public function __construct(HyperfAdminModel $model)
     {
         parent::__construct($model);
@@ -233,6 +245,39 @@ class Grid extends HyperfAdmin
         $this->html .= $html;
     }
 
+
+    /**
+     * 获取下载url
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/28
+     * Time: 11:11
+     * @return string
+     */
+    private function getExcelUrl()
+    {
+        $params = $this->request->all();
+        $get = http_build_query($params);
+
+        return config('hyperf-admin.app_host').$this->getUrl(substr($this->route,1,strlen($this->route)).'/excel?'.$get);
+    }
+
+    /**
+     * 导出按钮excel
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/28
+     * Time: 13:30
+     * @return mixed
+     */
+    private function getExcelHtml()
+    {
+        $html = ViewRepository::viewInitLineCom('content.excel',[
+            'excel_url' => $this->getExcelUrl(),
+        ]);
+        return $html;
+    }
+
     /**
      * 表格内容
      * Created by PhpStorm.
@@ -243,6 +288,7 @@ class Grid extends HyperfAdmin
     private function contentTable()
     {
         $html = ViewRepository::viewInitLineCom('content.table',[
+            'excelHtml' => $this->getExcelHtml(),
             'searchHtml' => $this->searchHtml,
             'fields' => $this->fields,
             'rows' => $this->rows,
@@ -266,6 +312,7 @@ class Grid extends HyperfAdmin
      */
     public function html(RequestInterface $request)
     {
+        $this->request = $request;
         // 头部信息
         $this->contentHeader();
         // 搜索内容初始化

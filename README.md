@@ -30,6 +30,8 @@ composer require pl/hyperf-admin
     ],
 ],
 
+# Success.php发布
+
 ```
 
 - 2、静态资源

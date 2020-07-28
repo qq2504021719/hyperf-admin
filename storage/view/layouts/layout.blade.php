@@ -3,7 +3,7 @@
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
 -->
-<html lang="en">
+<html lang="zh-cn">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -38,6 +38,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/dist/css/adminlte.min.css">
     <!-- Bootstrap4 Duallistbox -->
     <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+    <!-- toastr -->
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/toastr/toastr.css">
 
 
     <!-- jQuery -->
@@ -48,8 +50,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/nprogress.js"></script>
     <!-- Bootstrap 4 -->
     <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- 帮助方法 -->
-    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/functions.js"></script>
+
     <!-- Select2 -->
     <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/select2/js/select2.full.min.js"></script>
     <!-- Bootstrap4 Duallistbox -->
@@ -67,8 +68,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
     <!-- AdminLTE App -->
     <script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/adminlte.min.js"></script>
+    <!-- toastr -->
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/toastr/toastr.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     {{--<script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/demo.js"></script>--}}
+    <!-- 帮助方法 -->
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/functions.js"></script>
 
 </head>
 <body class="hold-transition sidebar-mini">
@@ -169,7 +174,7 @@ function pjaxDone()
     // 关闭进度条
     NProgress.done(true);
     // 关闭刷新转动
-    $('#view-fa-refresh').attr('class','');
+    $('#view-fa-refresh').attr('class','fas fa-refresh');
 
 }
 

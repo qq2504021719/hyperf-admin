@@ -11,9 +11,12 @@ namespace Pl\HyperfAdmin\Controllers;
 
 
 use App\Controller\AbstractController;
+use App\Controller\Success;
 use Pl\HyperfAdmin\Grid\Grid;
 use Pl\HyperfAdmin\HyperfAdmin;
+use Pl\HyperfAdmin\Lib\Functions;
 use Pl\HyperfAdmin\Model\AdminUsers;
+use Pl\HyperfAdmin\Repository\ExcelZipRepository;
 use Pl\HyperfAdmin\Repository\StateRepository;
 use Pl\HyperfAdmin\Repository\ViewRepository;
 use Hyperf\HttpServer\Annotation\Controller;
@@ -26,6 +29,7 @@ use Hyperf\HttpServer\Annotation\RequestMapping;
  */
 class UsersController extends HyperfAdminController
 {
+    use Functions;
     /**
      * 标题
      * @var string
@@ -43,6 +47,7 @@ class UsersController extends HyperfAdminController
      * @var array
      */
     public $breadcrumb = [];
+    
 
     /**
      * 初始化
@@ -76,7 +81,7 @@ class UsersController extends HyperfAdminController
         $this->breadcrumb = [];
         $this->subTitle = '列表';
 
-        $url = '/admin/api/admin_list';
+        $url = $this->getUrl('api/admin_list');
         $grid->search('name','昵称',StateRepository::SEARCH_LIKE);
         $grid->search('created_at','创建时间',StateRepository::SEARCH_TIME_BETWEEN);
         $grid->search('username','角色',StateRepository::SEARCH_SELETE2)->option([
@@ -95,6 +100,67 @@ class UsersController extends HyperfAdminController
 
         $this->initData($grid);
         return $grid->html($this->request);
+    }
+
+    /**
+     * 导出
+     * @RequestMapping(path="excel")
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/28
+     * Time: 11:03
+     */
+    public function excel()
+    {
+        $request = $this->request;
+        $query = AdminUsers::query();
+
+//        $query->whereIn('id',[1,2,3,4]);
+
+        /**
+         * 创建对象
+         */
+        $excel = new ExcelZipRepository('',$query,'管理员信息');
+
+        /**
+         * 导出初始化
+         */
+        $re = $excel->excel_init($request,function ($data){
+            return $this->excelDataInit($data);
+        });
+
+        return $this->response->json(Success::success(Success::success,$re));
+    }
+
+    /**
+     * 查询数据处理，格式化组合为导出格式
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/28
+     * Time: 11:31
+     * @param $data
+     * @return array
+     */
+    private function excelDataInit($data)
+    {
+        $rows = [];
+
+        $rows[0] = ['ID','头像','昵称','账号','创建时间'];
+
+        foreach ($data as $v)
+        {
+            $row = [];
+
+            $row[] = $this->arrIsKey($v,'id');
+            $row[] = $this->arrIsKey($v,'avatar');
+            $row[] = $this->arrIsKey($v,'name');
+            $row[] = $this->arrIsKey($v,'username');
+            $row[] = date('Y-m-d H:i:s',strtotime($this->arrIsKey($v,'created_at')));
+
+            $rows[] = $row;
+        }
+
+        return $rows;
     }
 
     /**

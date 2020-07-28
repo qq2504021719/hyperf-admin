@@ -9,8 +9,9 @@
             {{--表格数据--}}
             <div class="card">
             <div class="card-header">
+                {{--导出--}}
                 @if($isShow['export'])
-                    <a href="#" class="btn btn-primary"><i class="fa fa-download"></i> 导出</a>
+                    {!! $excelHtml !!}
                 @endif
             </div>
             <div class="card-body table-responsive p-0">
