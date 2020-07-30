@@ -196,14 +196,7 @@ class ViewRepository
                         'name' => '管理员添加',
                         'icon' => 'fas fa-users',
                         'path' => '/users/add',
-                    ],
-                    [
-                        'id' => 9,
-                        'f_id' => 5,
-                        'name' => '管理员修改',
-                        'icon' => 'fas fa-users',
-                        'path' => '/users/edit',
-                    ],
+                    ]
                 ],
             ]
         ];

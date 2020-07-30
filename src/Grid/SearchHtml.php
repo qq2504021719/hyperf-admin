@@ -106,7 +106,7 @@ function getElements(formId) {
 
   } 
   console.log("search-form参数组合GET参数:"+str)
-  viewFaRe(str,2);
+  viewFaRe(str,1);
 }  
 </script>
 EOT;

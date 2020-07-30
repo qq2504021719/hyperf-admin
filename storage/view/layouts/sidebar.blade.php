@@ -38,7 +38,7 @@
                             <ul class="nav nav-treeview" style="display: none;">
                                 @foreach($menu['subset'] as $subset)
                                     <li class="nav-item">
-                                        <a href="/{{$config['prefix']}}{{$subset['path']}}" data-pjax class="nav-link" data="{{$menu['id']}}" level="2">
+                                        <a href="/{{$config['prefix']}}{{$subset['path']}}"  data-pjax class="nav-link" data="{{$menu['id']}}" level="2">
                                             <i class="{{$subset['icon']}} nav-icon"></i>
                                             <p>{{$subset['name']}}</p>
                                         </a>

@@ -12,10 +12,10 @@ use Hyperf\HttpServer\Contract\RequestInterface;
 use Pl\HyperfAdmin\Model\HyperfAdminModel;
 use Pl\HyperfAdmin\Repository\StateRepository;
 use Pl\HyperfAdmin\Repository\TemplateEngineRepository;
+use Pl\HyperfAdmin\Repository\ViewRepository;
 
 class HyperfAdmin
 {
-
     /**
      * 请求
      * @var RequestInterface
@@ -34,7 +34,11 @@ class HyperfAdmin
      */
     public $title;
 
-
+    /**
+     * 页面内容
+     * @var
+     */
+    protected $html = '';
     /**
      * 面包屑
      * @var array
@@ -99,5 +103,40 @@ class HyperfAdmin
             ]
         ];
         $this->breadcrumb = array_merge($data,$this->breadcrumb);
+    }
+
+    /**
+     * 头部信息
+     * 标题 副标题
+     * 快捷导航
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/15
+     * Time: 14:33
+     */
+    protected function contentHeader()
+    {
+        // 面包屑初始化
+        $this->breadcrumbInit();
+
+        $html = ViewRepository::viewInitLineCom('content.header',[
+            'title' => $this->title,
+            'subTitle' => $this->subTitle,
+            'breadcrumb' => $this->breadcrumb,
+        ]);
+        $this->html .= $html;
+    }
+
+    /**
+     * 菜单选中变量
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/30
+     * Time: 19:12
+     * @return string
+     */
+    protected function getFPathScript()
+    {
+        return "var f_path = '/".config('hyperf-admin.route.prefix').$this->route."'";
     }
 }

@@ -103,6 +103,18 @@ class Column
     private $lab = '';
 
     /**
+     * 编辑url
+     * @var string
+     */
+    public $editUrl = '';
+
+    /**
+     * 删除url
+     * @var string
+     */
+    public $delUrl = '';
+
+    /**
      * 图片相关
      * @var
      */
@@ -115,6 +127,8 @@ class Column
         $this->name = $name;
         $this->label = $label;
         $this->type = $type;
+
+        $this->html = '';
     }
 
     /**
@@ -155,10 +169,14 @@ class Column
     public function setHtml()
     {
         $strHtml = '';
-        // 对应列html没有设置内容
-        if($this->html == '')
+        /**
+         * 对应列html没有设置内容
+         * 有手动设置显示的情况不调用
+         */
+        if($this->callback == '')
         {
             $data = $this->data;
+
             $str = $this->arrIsKey($data,$this->name);
             switch ($this->type)
             {
@@ -198,7 +216,9 @@ class Column
                 'isActivityEdit' => $this->isActivityEdit,
                 'isActivityDelete' => $this->isActivityDelete,
                 'id' => $id,
-                'themeColor' => $this->themeColor
+                'themeColor' => $this->themeColor,
+                'editUrl' => $this->getUrl($this->editUrl.'?id='.$id),
+                'delUrl'=> $this->getUrl($this->delUrl.'?id='.$id),
             ]);
         }
         return $html;

@@ -133,12 +133,15 @@ function navInit()
         $(this).parent().attr('class','nav-item has-treeview');
         // 子菜单隐藏
         $(this).next('ul').attr('style','display: none;');
+
         // 选中和当前路由名称一样的路由
-        if($(this).attr('href') === path)
+        if($(this).attr('href') === path || $(this).attr('href') == f_path)
         {
             $(this).attr('class','nav-link active');
             that = $(this);
         }
+
+
     })
     // 父级的父级的上一个兄弟标签是a标签的情况，也选中
     if(that)

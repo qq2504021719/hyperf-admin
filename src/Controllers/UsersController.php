@@ -48,6 +48,12 @@ class UsersController extends HyperfAdminController
      * @var array
      */
     public $breadcrumb = [];
+
+    /**
+     * 父级路由
+     * @var string
+     */
+    public $fPath = '/users';
     
 
     /**
@@ -64,7 +70,7 @@ class UsersController extends HyperfAdminController
         $object->subTitle = $this->subTitle;
         $object->breadcrumb = $this->breadcrumb;
         $object->request = $this->request;
-        $object->route = '/users';
+        $object->route = $this->fPath;
     }
 
     /**
@@ -104,11 +110,19 @@ class UsersController extends HyperfAdminController
 //        });
 
         $this->initData($grid);
-        return $grid->html($this->request);
+        return $grid->html();
     }
 
-
-    private function form()
+    /**
+     * form设置
+     * 编辑-添加字段设置
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/30
+     * Time: 17:03
+     * @param $met
+     */
+    private function form($met)
     {
         $form = new Form(new AdminUsers());
 
@@ -116,6 +130,28 @@ class UsersController extends HyperfAdminController
 
         $this->initData($form);
         return $form->html();
+    }
+
+    /**
+     * @RequestMapping(path="edit")
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/15
+     * Time: 17:02
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function edit()
+    {
+        $this->breadcrumb = [
+            [
+                'path' => '/users/edit',
+                'active' => 'active',
+                'name' => '编辑'
+            ]
+        ];
+        $this->subTitle = '编辑';
+
+        return $this->form('edit');
     }
 
     /**
@@ -207,27 +243,5 @@ class UsersController extends HyperfAdminController
         return $grid->html($this->request);
     }
 
-    /**
-     * @RequestMapping(path="edit")
-     * Created by PhpStorm.
-     * User: EricPan
-     * Date: 2020/7/15
-     * Time: 17:02
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function edit()
-    {
-        $grid = new Grid(new AdminUsers());
-        $this->breadcrumb = [
-            [
-                'path' => '/users/edit',
-                'active' => 'active',
-                'name' => '修改'
-            ]
-        ];
-        $this->subTitle = '修改';
 
-        $this->initData($grid);
-        return $grid->html($this->request);
-    }
 }

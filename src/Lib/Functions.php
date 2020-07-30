@@ -77,6 +77,8 @@ trait Functions
      */
     public function getUrl($url)
     {
+        if(substr($url,0,1) == '/') $url = substr($url,1,strlen($url));
+
         return '/'.config('hyperf-admin.route.prefix').'/'.$url;
     }
 
