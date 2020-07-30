@@ -71,7 +71,16 @@ class Grid extends HyperfAdmin
      * @var array
      */
     private $isShow = [
+        // 添加
+        'add' => true,
+        // 导出
         'export' => true,
+        // 是否显示操作列
+        'isActivity' => true,
+        // 是否显示操作编辑按钮
+        'isActivityEdit' => true,
+        // 是否显示操作删除按钮
+        'isActivityDelete' => true
     ];
 
     /**
@@ -98,7 +107,11 @@ class Grid extends HyperfAdmin
      * Date: 2020/7/27
      * Time: 14:20
      */
-    public function displayExport(){ $this->isShow['export'] = false;}
+    public function displayExport(){ $this->isShow['add'] = false;}
+    public function displayAdd(){ $this->isShow['export'] = false;}
+    public function displayActivity(){ $this->isShow['isActivity'] = false;}
+    public function displayActivityEdit(){ $this->isShow['isActivityEdit'] = false;}
+    public function displayActivityDel(){ $this->isShow['isActivityDelete'] = false;}
 
     /**
      * 列信息设置
@@ -112,10 +125,28 @@ class Grid extends HyperfAdmin
      */
     public function column($name,$label = '',$type = 'string')
     {
-        $column = new Column($name,$label,$type);
+        $column = $this->createColumn($name,$label,$type);
 
         $this->fields[$name] = $label;
         $this->columns[$name] = $column;
+        return $column;
+    }
+
+    /**
+     * 创建列对象
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/30
+     * Time: 13:12
+     * @param $name
+     * @param $label
+     * @param $type
+     * @return Column
+     */
+    private function createColumn($name,$label,$type):Column
+    {
+        $column = new Column($name,$label,$type);
+        $column->themeColor = $this->themeColor;
         return $column;
     }
 
@@ -150,9 +181,33 @@ class Grid extends HyperfAdmin
     private function searchInit(RequestInterface $request)
     {
         $searchHtml = new SearchHtml();
+        $searchHtml->themeColor = $this->themeColor;
         $re = $searchHtml->htmlInit($request,$this->model,$this->searchs);
         $this->model = $this->arrIsKey($re,'model');
         $this->searchHtml = $this->arrIsKey($re,'html');
+    }
+
+
+    /**
+     * 头部信息
+     * 标题 副标题
+     * 快捷导航
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/15
+     * Time: 14:33
+     */
+    private function contentHeader()
+    {
+        // 面包屑初始化
+        $this->breadcrumbInit();
+
+        $html = ViewRepository::viewInitLineCom('content.header',[
+            'title' => $this->title,
+            'subTitle' => $this->subTitle,
+            'breadcrumb' => $this->breadcrumb,
+        ]);
+        $this->html .= $html;
     }
 
     /**
@@ -198,6 +253,16 @@ class Grid extends HyperfAdmin
      */
     private function tableDataInit()
     {
+
+        // 判断是否显示操作
+        if($this->isShow['isActivity'])
+        {
+            $name = '';
+            $label = '操作';
+            $type = 'activity';
+            $this->column($name,$label,$type);
+        }
+
         if(count($this->data))
         {
             foreach ($this->data as $k=>$v)
@@ -209,8 +274,20 @@ class Grid extends HyperfAdmin
                 {
                     $column = '';
                     $column = $this->columns[$key];
-                    // 设置html
-                    $column->setHtml($v);
+                    // 行数据
+                    $column->data = $v;
+
+                    // 初始化
+                    $column->isActivity = $this->isShow['isActivity'];
+                    $column->isActivityEdit = $this->isShow['isActivityEdit'];
+                    $column->isActivityDelete = $this->isShow['isActivityDelete'];
+
+                    // 自定义html
+                    $column->displayHtml();
+
+                    // 设置默认html
+                    $column->setHtml();
+
                     $this->columns[$key] = $column;
                     // 列html存储数组
                     $data[$key] = $column->getHtml();
@@ -220,29 +297,6 @@ class Grid extends HyperfAdmin
                 $this->rows[$k] = $row;
             }
         }
-    }
-
-
-    /**
-     * 头部信息
-     * 标题 副标题
-     * 快捷导航
-     * Created by PhpStorm.
-     * User: EricPan
-     * Date: 2020/7/15
-     * Time: 14:33
-     */
-    private function contentHeader()
-    {
-        // 面包屑初始化
-        $this->breadcrumbInit();
-
-        $html = ViewRepository::viewInitLineCom('content.header',[
-            'title' => $this->title,
-            'subTitle' => $this->subTitle,
-            'breadcrumb' => $this->breadcrumb,
-        ]);
-        $this->html .= $html;
     }
 
 
@@ -274,8 +328,20 @@ class Grid extends HyperfAdmin
     {
         $html = ViewRepository::viewInitLineCom('content.excel',[
             'excel_url' => $this->getExcelUrl(),
+            'themeColor' => $this->themeColor
         ]);
         return $html;
+    }
+
+    /**
+     * 显示前初始化
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/30
+     * Time: 10:45
+     */
+    private function contentInit()
+    {
     }
 
     /**
@@ -287,6 +353,9 @@ class Grid extends HyperfAdmin
      */
     private function contentTable()
     {
+        // 显示前初始化
+        $this->contentInit();
+
         $html = ViewRepository::viewInitLineCom('content.table',[
             'excelHtml' => $this->getExcelHtml(),
             'searchHtml' => $this->searchHtml,

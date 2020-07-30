@@ -9,6 +9,7 @@
 namespace Pl\HyperfAdmin\Grid;
 
 use Pl\HyperfAdmin\Lib\Functions;
+use Pl\HyperfAdmin\Repository\StateRepository;
 use Pl\HyperfAdmin\Repository\ViewRepository;
 
 /**
@@ -19,6 +20,18 @@ use Pl\HyperfAdmin\Repository\ViewRepository;
 class Column
 {
     use Functions;
+
+    /**
+     * 主题色
+     * @var string
+     */
+    public $themeColor = '';
+
+    /**
+     * 行数据
+     * @var
+     */
+    public $data;
 
     /**
      * 字段名
@@ -54,11 +67,40 @@ class Column
      */
     private $sortOrder = 'DESC';
 
+
+    /**
+     * 自定义显示回调函数
+     * @var
+     */
+    private $callback = '';
+
     /**
      * 字段html
      * @var
      */
-    private $html;
+    private $html = '';
+
+    /**
+     * 是否显示操作列
+     * @var
+     */
+    public $isActivity = true;
+    /**
+     * 是否显示操作编辑按钮
+     * @var bool
+     */
+    public $isActivityEdit = true;
+    /**
+     * 是否显示操作删除按钮
+     * @var bool
+     */
+    public $isActivityDelete = true;
+
+    /**
+     * 内容 拉包裹
+     * @var string
+     */
+    private $lab = '';
 
     /**
      * 图片相关
@@ -109,30 +151,77 @@ class Column
      * User: EricPan
      * Date: 2020/7/16
      * Time: 13:34
-     * @param $data
      */
-    public function setHtml($data)
+    public function setHtml()
     {
         $strHtml = '';
-        $str = $this->arrIsKey($data,$this->name);
-        switch ($this->type)
+        // 对应列html没有设置内容
+        if($this->html == '')
         {
-            case 'string':
-                $strHtml = ViewRepository::viewInitLineCom('content.string',[
-                    'data' => $str,
-                ]);
-                break;
-            case 'image':
-                $strHtml = ViewRepository::viewInitLineCom('content.image',[
-                   'path' => $this->imgPath==""?$str:$this->imgPath.$str,
-                   'widht' => $this->imgWidht,
-                   'height' => $this->imgHeight
-                ]);
-                break;
+            $data = $this->data;
+            $str = $this->arrIsKey($data,$this->name);
+            switch ($this->type)
+            {
+                case 'string':
+                        $strHtml = $this->stringHtml($str);
+                    break;
+                case 'image':
+                    $strHtml = ViewRepository::viewInitLineCom('content.image',[
+                        'path' => $this->imgPath==""?$str:$this->imgPath.$str,
+                        'widht' => $this->imgWidht,
+                        'height' => $this->imgHeight
+                    ]);
+                    break;
+                case 'activity':
+                    $strHtml = $this->activityHtml($this->arrIsKey($data,'id'));
+                    break;
+            }
+            unset($str);
+            $this->html = $strHtml;
         }
-        unset($str);
-        $this->html = $strHtml;
-        return $this;
+    }
+
+    /**
+     * 操作html
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/30
+     * Time: 10:51
+     * @param $id
+     */
+    private function activityHtml($id)
+    {
+        $html = '';
+        if($this->isActivity)
+        {
+            $html = ViewRepository::viewInitLineCom('content.activity',[
+                'isActivityEdit' => $this->isActivityEdit,
+                'isActivityDelete' => $this->isActivityDelete,
+                'id' => $id,
+                'themeColor' => $this->themeColor
+            ]);
+        }
+        return $html;
+    }
+
+    /**
+     * 字符串html
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/30
+     * Time: 11:42
+     * @param $html
+     * @return string
+     */
+    private function stringHtml($str)
+    {
+        // 内容 lab 包裹
+        if($this->lab) $str = $this->labHtml($str);
+
+        $strHtml = ViewRepository::viewInitLineCom('content.string',[
+            'data' => $str,
+        ]);
+        return $strHtml;
     }
 
 
@@ -154,6 +243,36 @@ class Column
         $this->imgHeight = $height;
         $this->type = 'image';
         return $this;
+    }
+
+    /**
+     * 内容设置lab包裹
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/30
+     * Time: 11:47
+     * @param string $color
+     */
+    public function lab($color = ''){
+        if(!$color) $color = $this->themeColor;
+        $this->lab = $color;
+    }
+
+    /**
+     * 内容lab html设置
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/30
+     * Time: 11:48
+     * @param $html
+     */
+    private function labHtml($html)
+    {
+         $strHtml = ViewRepository::viewInitLineCom('content.lab',[
+            'data' => $html,
+            'color' => $this->lab
+        ]);
+        return $strHtml;
     }
 
     /**
@@ -196,4 +315,34 @@ class Column
         return $this->sortOrder;
     }
 
+    /**
+     * 自定义显示
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/30
+     * Time: 11:19
+     * @param $callback
+     */
+    public function display($callback)
+    {
+        $this->callback = $callback;
+    }
+
+    /**
+     * 自定义显示HTML
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/30
+     * Time: 11:32
+     */
+    public function displayHtml()
+    {
+        $callback = $this->callback;
+        if($callback)
+        {
+            $html = $callback($this->data);
+            $strHtml = $this->stringHtml($html);
+            $this->html = $strHtml;
+        }
+    }
 }

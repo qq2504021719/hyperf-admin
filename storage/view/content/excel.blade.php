@@ -1,4 +1,4 @@
-<button type="button"  class="btn btn-primary" onclick="hyperfAdminExcel()"><i class="fa fa-download" id="hyperfAdmin-loading" aria-hidden="true"></i> 导出</button>
+<button type="button"  class="btn btn-{{$themeColor}}" onclick="hyperfAdminExcel()"><i class="fa fa-download" id="hyperfAdmin-loading" aria-hidden="true"></i> 导出</button>
 <script>
 var hyperfAdminExcel_url = "{{$excel_url}}";
 

@@ -8,11 +8,20 @@
 
 namespace Pl\HyperfAdmin;
 
+use Hyperf\HttpServer\Contract\RequestInterface;
 use Pl\HyperfAdmin\Model\HyperfAdminModel;
+use Pl\HyperfAdmin\Repository\StateRepository;
 use Pl\HyperfAdmin\Repository\TemplateEngineRepository;
 
 class HyperfAdmin
 {
+
+    /**
+     * 请求
+     * @var RequestInterface
+     */
+    public $request;
+
     /**
      * 模板编译方法
      * @var TemplateEngineRepository
@@ -54,6 +63,12 @@ class HyperfAdmin
      * @var
      */
     public $subTitle;
+
+    /**
+     * 主题色
+     * @var string
+     */
+    public $themeColor = StateRepository::BOOTSTRAP_COLOR_PRIMARY;
 
     public function __construct(HyperfAdminModel $model)
     {

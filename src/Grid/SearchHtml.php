@@ -16,6 +16,12 @@ class SearchHtml
     use Functions;
 
     /**
+     * 主题色
+     * @var
+     */
+    public $themeColor;
+
+    /**
      * 搜索html组合初始化
      * Created by PhpStorm.
      * User: EricPan
@@ -66,7 +72,7 @@ class SearchHtml
             }
 
             // html结束
-            $htmls .= '<button type="button" onclick="getElements('."'".$id."'".')" class="btn btn-primary float-right">查询</button></form></div></div>';
+            $htmls .= '<button type="button" onclick="getElements('."'".$id."'".')" class="btn btn-'.$this->themeColor.' float-right">查询</button></form></div></div>';
 
             // script
             $htmls .= <<<EOT

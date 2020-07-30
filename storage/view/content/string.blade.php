@@ -1,1 +1,1 @@
-<td class="sorting_1 dtr-control">{{$data}}</td>
+<td class="sorting_1 dtr-control">{!! $data !!}</td>

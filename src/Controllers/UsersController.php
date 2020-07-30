@@ -12,6 +12,7 @@ namespace Pl\HyperfAdmin\Controllers;
 
 use App\Controller\AbstractController;
 use App\Controller\Success;
+use Pl\HyperfAdmin\Form\Form;
 use Pl\HyperfAdmin\Grid\Grid;
 use Pl\HyperfAdmin\HyperfAdmin;
 use Pl\HyperfAdmin\Lib\Functions;
@@ -57,11 +58,12 @@ class UsersController extends HyperfAdminController
      * Time: 16:09
      * @param $object
      */
-    public function initData(HyperfAdmin $object)
+    private function initData(HyperfAdmin $object)
     {
         $object->title = $this->title;
         $object->subTitle = $this->subTitle;
         $object->breadcrumb = $this->breadcrumb;
+        $object->request = $this->request;
         $object->route = '/users';
     }
 
@@ -93,13 +95,27 @@ class UsersController extends HyperfAdminController
 
         $grid->column('id','ID');
         $grid->column('avatar','头像')->image('',50,50);
-        $grid->column('name','昵称');
+        $grid->column('name','昵称')->lab();
         $grid->column('username','账号');
         $grid->column('created_at','创建时间');
-
+//        $grid->column('asder','其他操作')->display(function ($data){
+//            $id = $this->arrIsKey($data,'id');
+//            return '<button type="button" class="btn btn-primary btn-sm">编辑-'.$id.'</button>';
+//        });
 
         $this->initData($grid);
         return $grid->html($this->request);
+    }
+
+
+    private function form()
+    {
+        $form = new Form(new AdminUsers());
+
+
+
+        $this->initData($form);
+        return $form->html();
     }
 
     /**
@@ -114,8 +130,6 @@ class UsersController extends HyperfAdminController
     {
         $request = $this->request;
         $query = AdminUsers::query();
-
-//        $query->whereIn('id',[1,2,3,4]);
 
         /**
          * 创建对象

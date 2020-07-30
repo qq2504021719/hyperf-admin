@@ -22,4 +22,13 @@ class StateRepository
     const SEARCH_TIME_BETWEEN       = 'time_between';
     const SEARCH_SELETE2            = 'select';
     const SEARCH_SELETE2_AJAX       = 'select_ajax';
+
+
+    /**
+     * bootstrap通用颜色
+     */
+    const BOOTSTRAP_COLOR_DANGER    = 'danger';
+    const BOOTSTRAP_COLOR_WARNING   = 'warning';
+    const BOOTSTRAP_COLOR_PRIMARY   = 'primary';
+    const BOOTSTRAP_COLOR_SUCCESS   = 'success';
 }
