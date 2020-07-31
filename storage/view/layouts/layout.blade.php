@@ -16,8 +16,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <!-- 页面进度条 -->
-    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/dist/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/dist/css/nprogress.css">
     <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/dist/css/font-awesome.min.css">
+
     <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/fontawesome-free/css/all.min.css">
     <!-- iCheck for checkboxes and radio inputs -->
     <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
@@ -176,6 +178,7 @@ function pjaxDone()
     navInit();
     // 关闭进度条
     NProgress.done(true);
+
     // 关闭刷新转动
     $('#view-fa-refresh').attr('class','fas fa-refresh');
 
@@ -184,7 +187,7 @@ function pjaxDone()
 // 进度条配置
 NProgress.configure({
     showSpinner:false,
-    template:'<div class="bar" style="z-index:1039;"  role="bar">' +
+    template:'<div class="bar" style="z-index:2039;"  role="bar">' +
         '<div class="peg"></div></div><div class="spinner" role="spinner">' +
         '<div class="spinner-icon"></div></div>'
 });
