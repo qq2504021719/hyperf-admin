@@ -31,4 +31,21 @@ class StateRepository
     const BOOTSTRAP_COLOR_WARNING   = 'warning';
     const BOOTSTRAP_COLOR_PRIMARY   = 'primary';
     const BOOTSTRAP_COLOR_SUCCESS   = 'success';
+
+
+    /**
+     * Form页面
+     */
+    const FORM_TEXT                 = 'text';                               // 文本
+    const FORM_NUMBER               = 'number';                             // 数字
+    const FORM_UPLOAD               = 'upload';                             // 上传
+    const FORM_MANY_UPLOAD          = 'many_upload';                        // 多选上传
+    const FORM_SELECT               = 'select';                             // 下拉框
+    const FORM_SELECT_AJAX          = 'select_ajax';                        // 下拉框ajax加载
+    const FORM_CHECKBOX             = 'checkbox';                           // 多选
+    const FORM_RADIO                = 'radio';                              // 单选
+    const FORM_EDIT                 = 'edit';                               // 编辑
+    const FORM_ADD                  = 'add';                                // 添加
+
+
 }

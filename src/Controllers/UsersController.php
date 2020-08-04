@@ -125,8 +125,12 @@ class UsersController extends HyperfAdminController
     private function form($met)
     {
         $form = new Form(new AdminUsers());
+        $form->met = $met;
 
-
+        $form->field('avatar','头像',StateRepository::FORM_UPLOAD);
+        $form->field('name','昵称');
+        $form->field('username','账号');
+        $form->field('password','密码');
 
         $this->initData($form);
         return $form->html();
@@ -151,7 +155,12 @@ class UsersController extends HyperfAdminController
         ];
         $this->subTitle = '编辑';
 
-        return $this->form('edit');
+        return $this->form(StateRepository::FORM_EDIT);
+    }
+
+    public function editSave()
+    {
+        
     }
 
     /**

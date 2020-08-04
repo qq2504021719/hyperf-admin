@@ -10,7 +10,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
     <title>AdminLTE 3 | Starter</title>
-
+    <!-- glyphicons -->
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/dist/css/glyphicons.css">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/fontawesome-free/css/all.min.css">
     <!-- Google Font: Source Sans Pro -->
@@ -42,7 +43,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
     <!-- toastr -->
     <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/toastr/toastr.css">
-
+    <!-- fileinput -->
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/dist/css/fileinput.min.css">
 
     <!-- jQuery -->
     <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/jquery/jquery.min.js"></script>
@@ -70,10 +72,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
     <!-- AdminLTE App -->
     <script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/adminlte.min.js"></script>
-    <!-- toastr -->
+    <!-- toastr 提示 -->
     <script src="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/toastr/toastr.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     {{--<script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/demo.js"></script>--}}
+    <!-- fileinput -->
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/fileinput.min.js"></script>
+    <script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/fileinput.zh.js"></script>
     <!-- 帮助方法 -->
     <script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/functions.js"></script>
 
