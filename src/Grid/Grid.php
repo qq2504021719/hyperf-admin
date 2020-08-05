@@ -1,5 +1,6 @@
 <?php
 namespace Pl\HyperfAdmin\Grid;
+use App\Model\Model;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Pl\HyperfAdmin\HyperfAdmin;
 use Pl\HyperfAdmin\Lib\Functions;
@@ -97,7 +98,7 @@ class Grid extends HyperfAdmin
      */
     public $excelUrl = '';
 
-    public function __construct(HyperfAdminModel $model)
+    public function __construct(Model $model)
     {
         parent::__construct($model);
     }
@@ -109,8 +110,8 @@ class Grid extends HyperfAdmin
      * Date: 2020/7/27
      * Time: 14:20
      */
-    public function displayExport(){ $this->isShow['add'] = false;}
-    public function displayAdd(){ $this->isShow['export'] = false;}
+    public function displayExport(){ $this->isShow['export'] = false;}
+    public function displayAdd(){ $this->isShow['isAdd'] = false;}
     public function displayActivity(){ $this->isShow['isActivity'] = false;}
     public function displayActivityEdit(){ $this->isShow['isActivityEdit'] = false;}
     public function displayActivityDel(){ $this->isShow['isActivityDelete'] = false;}
@@ -307,7 +308,7 @@ class Grid extends HyperfAdmin
     {
         $params = $this->request->all();
         $get = http_build_query($params);
-        return config('hyperf-admin.app_host').$this->getUrl(substr($this->route,1,strlen($this->route)).'/'.StateRepository::URL_EXCEL.'?'.$get);
+        return $this->getUrl(substr($this->route,1,strlen($this->route)).'/'.StateRepository::URL_EXCEL.'?'.$get);
     }
 
     /**

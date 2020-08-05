@@ -31,7 +31,11 @@ composer require pl/hyperf-admin
     ],
 ],
 
+# 在public创建目录
+storage/download/excel/
+
 # Success.php发布
+
 
 ```
 
@@ -53,6 +57,9 @@ return [
         'enable_static_handler' => true,
     ],
 ];
+
+迁移文件 
+2020_07_16_102104_create_hyperf_admin_users
 ```
 
 # 发布配置文件
@@ -60,6 +67,11 @@ return [
 php bin/hyperf.php vendor:publish pl/hyperf-admin
 ```
 
+# 执行
+- [参考](https://hyperf.wiki/2.0/#/zh-cn/quick-start/questions)
+```
+composer dump-autoload -o
+```
 
 # 待办
 1.`Grid.php/setSearchHtml`方法优化

@@ -8,6 +8,7 @@
 
 namespace Pl\HyperfAdmin;
 
+use App\Model\Model;
 use Hyperf\Contract\SessionInterface;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Pl\HyperfAdmin\Model\HyperfAdminModel;
@@ -86,7 +87,7 @@ class HyperfAdmin
      */
     public $themeColor = StateRepository::BOOTSTRAP_COLOR_PRIMARY;
 
-    public function __construct(HyperfAdminModel $model)
+    public function __construct(Model $model)
     {
         $this->render = new TemplateEngineRepository();
         $this->modelM = $model;

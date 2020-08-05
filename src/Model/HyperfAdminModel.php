@@ -8,11 +8,11 @@ namespace Pl\HyperfAdmin\Model;
  * Time: 10:26
  */
 
+use App\Model\Model;
 use Hyperf\DbConnection\Model\Model as BaseModel;
 use Hyperf\ModelCache\Cacheable;
 use Hyperf\ModelCache\CacheableInterface;
 
-abstract class HyperfAdminModel extends BaseModel implements CacheableInterface
+abstract class HyperfAdminModel extends Model
 {
-    use Cacheable;
 }

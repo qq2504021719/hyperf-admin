@@ -1,6 +1,7 @@
 <?php
 namespace Pl\HyperfAdmin\Form;
 
+use App\Model\Model;
 use Hyperf\DbConnection\Db;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Pl\HyperfAdmin\HyperfAdmin;
@@ -63,7 +64,7 @@ class Form extends HyperfAdmin
      */
     public $saveFrontCallback = '';
 
-    public function __construct(HyperfAdminModel $model)
+    public function __construct(Model $model)
     {
         parent::__construct($model);
     }
