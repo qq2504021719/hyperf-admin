@@ -10,6 +10,7 @@ composer require pl/hyperf-admin
 - 1、模板缓存
 ```
 # runtime/view/目录不存在创建
+# session 配置-https://hyperf.wiki/2.0/#/zh-cn/session。(使用redis驱动session)
 
 # 日志配置
 'hyperfadmin' => [

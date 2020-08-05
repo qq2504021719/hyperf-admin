@@ -119,15 +119,19 @@
             {{--</div>--}}
         {{--</li>--}}
         <li class="nav-item">
-            {{--<div class="user-panel mt-3 pb-3 mb-3 d-flex">--}}
-            <div class="user-panel d-flex">
-            <div class="image">
-            <img src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+            {{--<a href="index3.html" class="brand-link">--}}
+                <a class="brand-link" data-toggle="dropdown" href="javascript:void(0)">
+                <img src="{{$user['avatar']}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3">
+                <span class="brand-text font-weight-light" style="color: #000000;">{{$user['name']}}</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <div class="dropdown-divider"></div>
+                <a href="{{$out}}" class="dropdown-item">
+                    <i class="glyphicon glyphicon-log-out"></i> 退出
+                </a>
             </div>
-            <div class="info">
-            <a href="#" class="d-block">Alexander Pierce</a>
-            </div>
-            </div>
+
+
         </li>
     </ul>
 </nav>

@@ -58,3 +58,6 @@
 
 
 
+    <script>
+        f_path = '';
+    </script>

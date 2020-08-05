@@ -94,4 +94,17 @@ trait Functions
     {
         return config('hyperf-admin.app_host').'/public/';
     }
+
+    /**
+     * 获取项目url
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/5
+     * Time: 11:13
+     * @return string
+     */
+    public function getHostUrl()
+    {
+        return config('hyperf-admin.app_host').'/';
+    }
 }

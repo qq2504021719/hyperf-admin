@@ -8,9 +8,10 @@
 <script>
 // 默认值初始化
 var preList{{$name}} = new Array();
-@if(count($data))
+var num{{$name}} = 0;
+        @if(count($data) > 0)
       @foreach($data as $k => $v)
-        preList{{$name}}['{{$k}}'] = '<img src="{{$v}}" class="file-preview-image" />';
+        preList{{$name}}['{{$k}}'] = '<img src="{{$v}}" style="max-width:100%" />';
       @endforeach
 @endif
     $("#{{$name}}uploadFile").fileinput({
@@ -29,7 +30,7 @@ var preList{{$name}} = new Array();
             actionUpload:'',
         },
         maxFileCount:1, //表示允许同时上传的最大文件个数
-          minFileCount:1,
+        minFileCount:1,
         autoReplace:true,// 是否自动替换当前图片，设置为true时，再次选择文件，会将当前的文件替换掉。
         enctype:'multipart/form-data',
         validateInitialCount:true,
@@ -40,29 +41,37 @@ var preList{{$name}} = new Array();
         msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
 
     }).on("filebatchselected", function (event, data){
+          if(num{{$name}} >= 1)
+          {
+              toastr.warning('上传失败,上传的图片不能超过1张');
+          }
+          else
+          {
+              $(this).fileinput("upload");
+          }
           // 清空预览
           // $(event.target).fileinput('clear').fileinput('unlock');
           // 选择完文件-自动上传
-          // $(this).fileinput("upload");
     })
       // 异步上传错误结果处理
       .on('fileerror', function(event, data, msg) {
           // 清除当前的预览图 ，并隐藏 【移除】 按钮
-          $(event.target)
-              .fileinput('clear')
-              .fileinput('unlock')
-          $(event.target)
-              .parent()
-              .siblings('.fileinput-remove')
-              .hide()
-          // 打开失败的信息弹窗
-          toastr.warning('请求失败，请稍后重试')
+          // $(event.target)
+          //     .fileinput('clear')
+          //     .fileinput('unlock')
+          // $(event.target)
+          //     .parent()
+          //     .siblings('.fileinput-remove')
+          //     .hide()
+          // // 打开失败的信息弹窗
+          // toastr.warning('请求失败，请稍后重试')
       })
       .on("fileuploaded", function(event, data) {
       var key = '{{$name}}uploadFile-value';
       var re = data.response;
       if(re.code == 200)
       {
+          num{{$name}}++;
           // 设置图片值
           $('#'+key).attr('value',re.data.path);
       }
@@ -70,5 +79,13 @@ var preList{{$name}} = new Array();
       {
           toastr.error(re.msg)
       }
+    })
+          //删除单张图片事件，只针对已经上传的图片
+    .on("filesuccessremove",function(event, data, msg){
+
+    })
+          // 删除单张图片，但只针对未上传的图片
+    .on("fileremoved",function(event, data, msg){
+
     });
 </script>

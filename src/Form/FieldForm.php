@@ -126,7 +126,11 @@ class FieldForm
      */
     private function getUploadHtml()
     {
-        $data[] = $this->data;
+        $data = [];
+        if($this->data)
+        {
+            $data[] = $this->data;
+        }
 
         $html = ViewRepository::viewInitLineCom('content.form.upload',[
             'name' => $this->name,
@@ -136,7 +140,7 @@ class FieldForm
             'placeholder' => '请上传文件',
             'isRequest' => $this->isRequest,
             'errorStr' => $this->errorStr,
-            'themeColor' => $this->themeColor
+            'themeColor' => $this->themeColor,
 
         ]);
         return $html;

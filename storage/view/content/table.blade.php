@@ -7,7 +7,6 @@
             <div class="col-md-12">
                 {!! $searchHtml !!}
 
-                @if(count($rows))
                     {{--表格数据--}}
                     <div class="card">
                     <div class="card-header">
@@ -15,7 +14,16 @@
                         @if($isShow['export'])
                             {!! $excelHtml !!}
                         @endif
+                        {{--添加按钮--}}
+                        @if($isShow['isAdd'])
+                            {!! $addHtml !!}
+                        @endif
+                        {{--头部html自定义--}}
+                        @if($headerHtml)
+                            {!! $headerHtml !!}
+                        @endif
                     </div>
+                    @if(count($rows))
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover text-nowrap">
                             <thead>
@@ -39,17 +47,16 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-                @else
-                    <div class="card">
-                        <div class="card-body">
-                            <div align="center">
-                                <i class="fa fa-inbox fa-5x" aria-hidden="true" style="color: rgba(0,0,0,.5)"></i>
-                            </div>
+                    @else
+
+                        <div align="center">
+                            <i class="fa fa-inbox fa-5x" aria-hidden="true" style="color: rgba(0,0,0,.5)"></i>
                         </div>
-                    </div>
-                    {{--无数据--}}
-                @endif
+
+                        {{--无数据--}}
+                    @endif
+                </div>
+
                 @if(count($rows))
                     <div class="card">
                         <div class="card-body">
@@ -68,3 +75,6 @@
 <!-- /.content -->
 
 
+<script>
+    f_path = '';
+</script>

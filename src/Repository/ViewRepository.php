@@ -9,11 +9,15 @@
 namespace Pl\HyperfAdmin\Repository;
 
 
+use Hyperf\Contract\SessionInterface;
+use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\RequestInterface;
+use Pl\HyperfAdmin\Lib\Functions;
 use Pl\HyperfAdmin\Repository\TemplateEngineRepository;
 
 class ViewRepository
 {
+
     /**
      * 模板名称处理
      * Created by PhpStorm.
@@ -25,7 +29,7 @@ class ViewRepository
      */
     public static function viewStrInit($str)
     {
-        return $str;
+        return config('hyperf-admin.view_template_prefix').$str;
     }
 
     /**
@@ -63,6 +67,7 @@ class ViewRepository
             $data['html'] = $html;
             // 页面菜单数据
             $data['menus'] = self::menuInit();
+            $data['user'] = AuthRepository::user($view->session);
 
             return $render->render('layouts.layout',$data);
         }
@@ -81,7 +86,7 @@ class ViewRepository
      * @param array $data
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public static function viewInitLine(RequestInterface $request,$html,$params = [])
+    public static function viewInitLine(RequestInterface $request,$html,$params = [],SessionInterface $session)
     {
         $data = [];
         $_pjax = $request->input('_pjax','');
@@ -105,6 +110,8 @@ class ViewRepository
             $data['html'] = $html;
             // 页面菜单数据
             $data['menus'] = self::menuInit();
+            $data['user'] = AuthRepository::user($session);
+            $data['out'] =  '/'.config('hyperf-admin.route.prefix').'/'.StateRepository::URL_LOGIN_OUT;
 
             return $render->render('layouts.layout',$data);
         }
@@ -140,66 +147,7 @@ class ViewRepository
      */
     public static function menuInit()
     {
-        $data = [
-            [
-                'id' => 7,
-                'name' => 'Test首页',
-                'path' => '/testindex',
-                'icon' => 'fas fa-tachometer-alt',
-                'subset' => []
-            ],
-            [
-                'id' => 1,
-                'name' => 'Test菜单',
-                'path' => '',
-                'icon' => 'fas fa-tachometer-alt',
-                'subset' => [
-                    [
-                        'id' => 2,
-                        'f_id' => 1,
-                        'name' => 'Test首页',
-                        'icon' => 'far fa-circle',
-                        'path' => '/testindex1',
-                    ],
-                    [
-                        'id' => 3,
-                        'f_id' => 1,
-                        'name' => 'Test',
-                        'icon' => 'far fa-circle',
-                        'path' => '/test',
-                    ],
-                    [
-                        'id' => 4,
-                        'f_id' => 1,
-                        'name' => 'Test1',
-                        'icon' => 'far fa-circle',
-                        'path' => '/test1',
-                    ],
-                ],
-            ],
-            [
-                'id' => 5,
-                'name' => '系统',
-                'path' => '',
-                'icon' => 'fas fa-cog',
-                'subset' => [
-                    [
-                        'id' => 6,
-                        'f_id' => 5,
-                        'name' => '管理员',
-                        'icon' => 'fas fa-users',
-                        'path' => '/users',
-                    ],
-                    [
-                        'id' => 8,
-                        'f_id' => 5,
-                        'name' => '管理员添加',
-                        'icon' => 'fas fa-users',
-                        'path' => '/users/add',
-                    ]
-                ],
-            ]
-        ];
+        $data = config('hyperf-admin.menu');
         return $data;
     }
 }

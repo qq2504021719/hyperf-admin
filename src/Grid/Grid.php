@@ -4,6 +4,7 @@ use Hyperf\HttpServer\Contract\RequestInterface;
 use Pl\HyperfAdmin\HyperfAdmin;
 use Pl\HyperfAdmin\Lib\Functions;
 use Pl\HyperfAdmin\Model\HyperfAdminModel;
+use Pl\HyperfAdmin\Repository\StateRepository;
 use Pl\HyperfAdmin\Repository\ViewRepository;
 
 /**
@@ -61,13 +62,23 @@ class Grid extends HyperfAdmin
     private $data = [];
 
     /**
+     * 头部html
+     * @var string
+     */
+    private $headerAppend = '';
+
+    /**
+     * 类型 list  excel
+     * @var
+     */
+    public $met;
+
+    /**
      * 组件显示隐藏
      * export 导出
      * @var array
      */
     private $isShow = [
-        // 添加
-        'add' => true,
         // 导出
         'export' => true,
         // 是否显示操作列
@@ -75,7 +86,9 @@ class Grid extends HyperfAdmin
         // 是否显示操作编辑按钮
         'isActivityEdit' => true,
         // 是否显示操作删除按钮
-        'isActivityDelete' => true
+        'isActivityDelete' => true,
+        // 是否显示添加按钮
+        'isAdd' => true
     ];
 
     /**
@@ -119,6 +132,20 @@ class Grid extends HyperfAdmin
         $this->fields[$name] = $label;
         $this->columns[$name] = $column;
         return $column;
+    }
+
+
+    /**
+     * 页面头部html添加
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/5
+     * Time: 10:40
+     * @param $html
+     */
+    public function headerAppend($html)
+    {
+        $this->headerAppend = $html;
     }
 
     /**
@@ -280,8 +307,7 @@ class Grid extends HyperfAdmin
     {
         $params = $this->request->all();
         $get = http_build_query($params);
-
-        return config('hyperf-admin.app_host').$this->getUrl(substr($this->route,1,strlen($this->route)).'/excel?'.$get);
+        return config('hyperf-admin.app_host').$this->getUrl(substr($this->route,1,strlen($this->route)).'/'.StateRepository::URL_EXCEL.'?'.$get);
     }
 
     /**
@@ -296,6 +322,23 @@ class Grid extends HyperfAdmin
     {
         $html = ViewRepository::viewInitLineCom('content.excel',[
             'excel_url' => $this->getExcelUrl(),
+            'themeColor' => $this->themeColor
+        ]);
+        return $html;
+    }
+
+    /**
+     * 添加按钮
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/5
+     * Time: 10:37
+     * @return mixed
+     */
+    private function getAddHtml()
+    {
+        $html = ViewRepository::viewInitLineCom('content.add',[
+            'add_url' => $this->getUrl($this->route.'/'.StateRepository::URL_ADD),
             'themeColor' => $this->themeColor
         ]);
         return $html;
@@ -325,6 +368,8 @@ class Grid extends HyperfAdmin
         $this->contentInit();
 
         $html = ViewRepository::viewInitLineCom('content.table',[
+            'headerHtml' => $this->headerAppend,
+            'addHtml' => $this->getAddHtml(),
             'excelHtml' => $this->getExcelHtml(),
             'searchHtml' => $this->searchHtml,
             'fields' => $this->fields,
@@ -379,6 +424,22 @@ class Grid extends HyperfAdmin
         // 页面默认script初始化
         $this->contentScriptInit();
 
-        return ViewRepository::viewInitLine($request,$this->html);
+        return ViewRepository::viewInitLine($request,$this->html,[],$this->session);
+    }
+
+    /**
+     * query获取
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/5
+     * Time: 15:41
+     * @return \Hyperf\Database\Model\Builder|Grid
+     */
+    public function getQuery()
+    {
+        $request = $this->request;
+        // 搜索内容初始化
+        $this->searchInit($request);
+        return $this->model;
     }
 }

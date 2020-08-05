@@ -1,10 +1,12 @@
 <?php
 namespace Pl\HyperfAdmin\Form;
 
+use Hyperf\DbConnection\Db;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Pl\HyperfAdmin\HyperfAdmin;
 use Pl\HyperfAdmin\Lib\Functions;
 use Pl\HyperfAdmin\Model\HyperfAdminModel;
+use Pl\HyperfAdmin\Repository\Redis\ExceptionDataRedis;
 use Pl\HyperfAdmin\Repository\StateRepository;
 use Pl\HyperfAdmin\Repository\ViewRepository;
 
@@ -32,7 +34,7 @@ class Form extends HyperfAdmin
 
     /**
      * 类型
-     * 编辑 添加
+     * 编辑edit 编辑保存edit_save 添加add 添加保存add_save
      * @var string
      */
     public $met = '';
@@ -42,6 +44,24 @@ class Form extends HyperfAdmin
      * @var string
      */
     private $formHtml = '';
+
+    /**
+     * 主键id
+     * @var string
+     */
+    private $id = '';
+
+    /**
+     * 是否开启悲观锁更改数据
+     * @var
+     */
+    public  $isLockForUpdate;
+
+    /**
+     * 保存前回调
+     * @var
+     */
+    public $saveFrontCallback = '';
 
     public function __construct(HyperfAdminModel $model)
     {
@@ -123,14 +143,38 @@ class Form extends HyperfAdmin
      */
     private function contentTable()
     {
+
         $html = ViewRepository::viewInitLineCom('content.form.form',[
             'f_path' => $this->route,
             'html' => $this->formHtml,
-            'themeColor' => $this->themeColor
+            'themeColor' => $this->themeColor,
+            'id' => $this->id,
+            'action' => $this->getActivity()
         ]);
         $this->html .= $html;
 
 
+    }
+
+    /**
+     * form-url
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/5
+     * Time: 10:58
+     */
+    private function getActivity()
+    {
+        $url = '';
+        if($this->met == StateRepository::FORM_ADD)
+        {
+            $url = $this->getUrl($this->route.'/'.StateRepository::URL_ADD_SAVE);
+        }
+        else
+        {
+            $url = $this->getUrl($this->route.'/'.StateRepository::URL_EDIT_SAVE);
+        }
+        return $url;
     }
 
     /**
@@ -156,6 +200,8 @@ class Form extends HyperfAdmin
      */
     public function html()
     {
+        $this->id = $this->request->input('id');
+
         // 头部信息
         $this->contentHeader();
         // 查询数据初始化
@@ -167,6 +213,95 @@ class Form extends HyperfAdmin
         // 页面默认script初始化
         $this->contentScriptInit();
 
-        return ViewRepository::viewInitLine($this->request,$this->html);
+        return ViewRepository::viewInitLine($this->request,$this->html,[],$this->session);
+    }
+
+
+    /**
+     * 编辑提交修改
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/5
+     * Time: 10:04
+     */
+    public function editSave()
+    {
+        try
+        {
+            $params = $this->request->all();
+            $updates = [];
+            // 保存前回调
+            $params = $this->saveFrontCallback($params);
+
+            foreach ($this->fileds as $v)
+            {
+                $updates[$v] = $this->arrIsKey($params,$v);
+            }
+            Db::beginTransaction();
+            $query = $this->model;
+
+            if($this->isLockForUpdate)
+            {
+                $query->lockForUpdate();
+            }
+            $query->where('id',$this->arrIsKey($params,'id'))->update($updates);
+            Db::commit();
+        }catch (\Exception $exception)
+        {
+            $redis = new ExceptionDataRedis();
+            $redis->set($exception);
+        }
+    }
+
+    /**
+     * 保存前回调
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/5
+     * Time: 14:13
+     * @param $params
+     * @return mixed
+     */
+    private function saveFrontCallback($params)
+    {
+        $saveFrontCallback = $this->saveFrontCallback;
+        if($saveFrontCallback)
+        {
+            $params = $saveFrontCallback($params);
+        }
+        return $params;
+    }
+
+    /**
+     * 添加提交修改
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/5
+     * Time: 10:04
+     */
+    public function addSave()
+    {
+        try
+        {
+            $params = $this->request->all();
+            $inserts = [];
+
+            // 保存前回调
+            $params = $this->saveFrontCallback($params);
+
+
+            Db::beginTransaction();
+            $model = $this->modelM;
+            foreach ($this->fileds as $v)
+            {
+                $model->$v = $this->arrIsKey($params,$v);
+            }
+            $model->save();
+            Db::commit();
+        }catch (\Exception $exception)
+        {
+            $redis = new ExceptionDataRedis();
+            $redis->set($exception);
+        }
     }
 }

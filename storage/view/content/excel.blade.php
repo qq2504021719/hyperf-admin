@@ -1,6 +1,6 @@
 <button type="button"  class="btn btn-{{$themeColor}}" onclick="hyperfAdminExcel()"><i class="fa fa-download" id="hyperfAdmin-loading" aria-hidden="true"></i> 导出</button>
 <script>
-var hyperfAdminExcel_url = "{{$excel_url}}";
+var hyperfAdminExcel_url = "{!! $excel_url !!}";
 
 /**
  * 导出请求

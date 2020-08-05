@@ -8,6 +8,7 @@
 
 namespace Pl\HyperfAdmin;
 
+use Hyperf\Contract\SessionInterface;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Pl\HyperfAdmin\Model\HyperfAdminModel;
 use Pl\HyperfAdmin\Repository\StateRepository;
@@ -27,6 +28,12 @@ class HyperfAdmin
      * @var TemplateEngineRepository
      */
     protected $render;
+
+    /**
+     * session
+     * @var SessionInterface
+     */
+    public $session;
 
     /**
      * 标题
@@ -56,11 +63,16 @@ class HyperfAdmin
     public $isIndex = false;
 
     /**
-     * 模型
+     * 模型-query
      * @var
      */
     public $model;
 
+    /**
+     * 模型
+     * @var
+     */
+    protected $modelM;
 
     /**
      * 副标题
@@ -77,6 +89,7 @@ class HyperfAdmin
     public function __construct(HyperfAdminModel $model)
     {
         $this->render = new TemplateEngineRepository();
+        $this->modelM = $model;
         $this->model = $model->newModelQuery();
 
     }
@@ -92,7 +105,7 @@ class HyperfAdmin
     {
         $data = [
             [
-                'path' => '/index',
+                'path' => config('hyperf-admin.login_url'),
                 'active' => '',
                 'name' => '首页'
             ],

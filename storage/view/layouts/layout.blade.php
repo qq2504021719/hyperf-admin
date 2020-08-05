@@ -9,13 +9,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>AdminLTE 3 | Starter</title>
+    <title>{{config('hyperf-admin.name')}}</title>
     <!-- glyphicons -->
     <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/dist/css/glyphicons.css">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/plugins/fontawesome-free/css/all.min.css">
     <!-- Google Font: Source Sans Pro -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/dist/css/googleapis.css">
     <!-- 页面进度条 -->
     <link rel="stylesheet" href="{{config('hyperf-admin.app_host')}}/public/vendor/dist/css/nprogress.css">
     <!-- Font Awesome -->
@@ -81,7 +81,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/fileinput.zh.js"></script>
     <!-- 帮助方法 -->
     <script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/functions.js"></script>
-
+    <script>
+        // 父路由
+        var f_path = '';
+    </script>
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="bar" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>
@@ -132,7 +135,6 @@ function navInit()
     {
         path = path+'/testindex';
     }
-
     $(".nav-link").each(function () {
         // 关闭所有菜单选中
         $(this).attr('class','nav-link');
@@ -142,6 +144,7 @@ function navInit()
         $(this).next('ul').attr('style','display: none;');
 
         // 选中和当前路由名称一样的路由
+        // if($(this).attr('href') === path)
         if($(this).attr('href') === path || $(this).attr('href') == f_path)
         {
             $(this).attr('class','nav-link active');

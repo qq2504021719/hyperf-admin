@@ -40,7 +40,7 @@ class CommonRepository
 //            }
 //            else
 //            {
-                $path = $this->getPublic().$path;
+                $path = $this->getHostUrl().$path;
 //            }
         }
         return ['path'=>$path];

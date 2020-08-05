@@ -35,6 +35,7 @@ class StateRepository
 
     /**
      * Form页面
+     *
      */
     const FORM_TEXT                 = 'text';                               // 文本
     const FORM_NUMBER               = 'number';                             // 数字
@@ -45,7 +46,23 @@ class StateRepository
     const FORM_CHECKBOX             = 'checkbox';                           // 多选
     const FORM_RADIO                = 'radio';                              // 单选
     const FORM_EDIT                 = 'edit';                               // 编辑
+    const FORM_EDIT_SAVE            = 'edit_save';                          // 编辑保存
     const FORM_ADD                  = 'add';                                // 添加
+    const FORM_ADD_SAVE             = 'add_save';                           // 添加保存
+    const GRID_LIST                 = 'list';                               // list
+    const GRID_EXCEL                = 'excel';                              // 导出
 
 
+
+
+    /**
+     * 固定格式url
+     */
+    const URL_LOGIN                 = 'auth';                               // 登录页
+    const URL_LOGIN_OUT             = 'auth/out';                           // 退出
+    const URL_EXCEL                 = 'excel';                              // 导出
+    const URL_EDIT                  = 'edit';                               // 编辑
+    const URL_EDIT_SAVE             = 'edit_save';                          // 编辑保存
+    const URL_ADD                   = 'add';                                // 添加
+    const URL_ADD_SAVE              = 'add_save';                           // 添加保存
 }

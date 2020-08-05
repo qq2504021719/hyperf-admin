@@ -22,6 +22,7 @@
         "hyperf/view": "^2.0",
         "duncan3dc/blade": "^4.10",
         "hyperf/task": "^2.0",
+        "hyperf/session": "^2.0",
         "viest/php-ext-xlswriter-ide-helper": "dev-master"
     },
     "require-dev": {
