@@ -6,15 +6,14 @@
         </select>
     </div>
     <script>
-        var select2Name = "{{$name}}";
-        var key = '.select2_ajax_'+select2Name;
-        var val = "{{$data}}";
+        var key{{$name}} = '.select2_ajax_{{$name}}';
+        var val{{$name}} = "{{$data}}";
 
         // 设置默认选择事件
-        $(key).val(val).select2()
+        $(key{{$name}}).val(val{{$name}}).select2()
         //初始化Select2
         var flag = (typeof formatResult === "function") ? true : false;
-        $(key).select2({
+        $(key{{$name}}).select2({
             placeholder: {id: '', text: "{{$place}}"}, // 同上，这里默认空值为 ''
             allowClear:true, // 允许清除
             // 最少输入N个字符才开始检索，如果想在点击下拉框时加载数据，请设置为 0
@@ -64,10 +63,10 @@
         })
 
         // 选中事件
-        $(key).on("select2:select", function(e) {
-            var val = $(key).select2("val");
+        $(key{{$name}}).on("select2:select", function(e) {
+            var val = $(key{{$name}}).select2("val");
             // 设置值
-            $('#select2-input-'+select2Name).attr('value',val)
+            $('#select2-input-{{$name}}').attr('value',val)
         });
     </script>
 </div>
