@@ -2,17 +2,34 @@
 
 ```
 composer require pl/hyperf-admin
+
 ```
 
+# 扩展包
+
+#### [导出安装](https://blog.csdn.net/qq_29755359/article/details/104575938)
+```
+composer require viest/php-ext-xlswriter-ide-helper:dev-master
+
+```
+
+#### [session配置](https://hyperf.wiki/2.0/#/zh-cn/session)
+```
+composer require hyperf/session
+```
+
+
+#### [视图配置](https://hyperf.wiki/2.0/#/zh-cn/view)
+```
+composer require hyperf/view
+composer require hyperf/task
+composer require duncan3dc/blade
+```
 
 # 配置
 
-- 1、模板缓存
+#### 日志配置
 ```
-# runtime/view/目录不存在创建
-# session 配置-https://hyperf.wiki/2.0/#/zh-cn/session。(使用redis驱动session)
-
-# 日志配置
 'hyperfadmin' => [
     'handler' => [
         'class' => Monolog\Handler\RotatingFileHandler::class,
@@ -30,16 +47,15 @@ composer require pl/hyperf-admin
         ],
     ],
 ],
-
-# 在public创建目录
-storage/download/excel/
-
-# Success.php发布
-
-
 ```
 
-- 2、静态资源
+#### 导出目录创建
+```$xslt
+# 在public创建目录
+storage/download/excel/
+```
+
+#### 静态资源
 
 ```
 # 扩展包almasaeed2010的下的dist、plugins复制到public/vendor里面
@@ -47,7 +63,7 @@ storage/download/excel/
 # 添加font-awesome.min.css和对应fonts字体
 ```
 
-- 3、配置静态资源
+#### 配置静态资源
 ```php
 return [
     'settings' => [
@@ -57,8 +73,10 @@ return [
         'enable_static_handler' => true,
     ],
 ];
+```
 
-迁移文件 
+#### 迁移文件 
+```
 2020_07_16_102104_create_hyperf_admin_users
 ```
 
@@ -74,5 +92,3 @@ composer dump-autoload -o
 ```
 
 # 待办
-1.`Grid.php/setSearchHtml`方法优化
-2.继续添加搜索方法

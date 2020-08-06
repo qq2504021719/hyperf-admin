@@ -182,7 +182,6 @@ class Column
              * 有手动设置显示的情况不调用
              */
             $data = $this->data;
-
             $str = $html?$html:$this->arrIsKey($data,$this->name);
             switch ($this->type)
             {
@@ -191,7 +190,6 @@ class Column
                     break;
                 case 'image':
                     $imgData = $this->imgPath==""?$str:$this->imgPath.$str;
-//                $imgData = $str?$str:$imgData;
                     $strHtml = ViewRepository::viewInitLineCom('content.image',[
                         'path' => $imgData,
                         'widht' => $this->imgWidht,
@@ -354,6 +352,7 @@ class Column
     public function display($callback)
     {
         $this->callback = $callback;
+        return $this;
     }
 
     /**
@@ -369,6 +368,7 @@ class Column
         if($callback)
         {
             $html = $callback($this->data);
+            $this->isCallback = false;
             $strHtml = $this->setHtml($html);
             $this->isCallback = true;
         }
