@@ -75,6 +75,12 @@ class Column
     private $callback = '';
 
     /**
+     * callback是否执行过
+     * @var bool
+     */
+    private $isCallback = false;
+
+    /**
      * 字段html
      * @var
      */
@@ -166,26 +172,28 @@ class Column
      * Date: 2020/7/16
      * Time: 13:34
      */
-    public function setHtml()
+    public function setHtml($html = '')
     {
         $strHtml = '';
-        /**
-         * 对应列html没有设置内容
-         * 有手动设置显示的情况不调用
-         */
-        if($this->callback == '')
+        if($this->isCallback === false)
         {
+            /**
+             * 对应列html没有设置内容
+             * 有手动设置显示的情况不调用
+             */
             $data = $this->data;
 
-            $str = $this->arrIsKey($data,$this->name);
+            $str = $html?$html:$this->arrIsKey($data,$this->name);
             switch ($this->type)
             {
                 case 'string':
-                        $strHtml = $this->stringHtml($str);
+                    $strHtml = $this->stringHtml($str);
                     break;
                 case 'image':
+                    $imgData = $this->imgPath==""?$str:$this->imgPath.$str;
+//                $imgData = $str?$str:$imgData;
                     $strHtml = ViewRepository::viewInitLineCom('content.image',[
-                        'path' => $this->imgPath==""?$str:$this->imgPath.$str,
+                        'path' => $imgData,
                         'widht' => $this->imgWidht,
                         'height' => $this->imgHeight
                     ]);
@@ -288,7 +296,7 @@ class Column
      */
     private function labHtml($html)
     {
-         $strHtml = ViewRepository::viewInitLineCom('content.lab',[
+        $strHtml = ViewRepository::viewInitLineCom('content.lab',[
             'data' => $html,
             'color' => $this->lab
         ]);
@@ -361,8 +369,8 @@ class Column
         if($callback)
         {
             $html = $callback($this->data);
-            $strHtml = $this->stringHtml($html);
-            $this->html = $strHtml;
+            $strHtml = $this->setHtml($html);
+            $this->isCallback = true;
         }
     }
 }

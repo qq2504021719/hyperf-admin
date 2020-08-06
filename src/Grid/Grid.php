@@ -282,7 +282,7 @@ class Grid extends HyperfAdmin
                     $column->displayHtml();
 
                     // 设置默认html
-                    $column->setHtml($v);
+                    $column->setHtml();
 
                     $this->columns[$key] = $column;
                     // 列html存储数组
