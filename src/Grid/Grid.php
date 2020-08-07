@@ -199,6 +199,7 @@ class Grid extends HyperfAdmin
     {
         $searchHtml = new SearchHtml();
         $searchHtml->themeColor = $this->themeColor;
+        $searchHtml->fields = $this->fields;
         $re = $searchHtml->htmlInit($request,$this->model,$this->searchs);
         $this->model = $this->arrIsKey($re,'model');
         $this->searchHtml = $this->arrIsKey($re,'html');

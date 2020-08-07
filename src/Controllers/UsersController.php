@@ -76,14 +76,7 @@ class UsersController extends HyperfAdminController
         $grid->model->orderBy('id','DESC');
         $grid->isIndex = true;
 
-        $url = $this->getUrl('api/admin_list');
-        $grid->search('name','昵称',StateRepository::SEARCH_LIKE);
-        $grid->search('created_at','创建时间',StateRepository::SEARCH_TIME_BETWEEN);
-        $grid->search('username','角色',StateRepository::SEARCH_SELETE2)->option([
-            'admin' => '系统管理员',
-            '订单管理员' => '普通管理员'
-        ]);
-        $grid->search('id','管理员',StateRepository::SEARCH_SELETE2_AJAX)->ajax($url);
+
 
 
         $grid->column('id','ID');
@@ -95,6 +88,19 @@ class UsersController extends HyperfAdminController
 //            $id = $this->arrIsKey($data,'id');
 //            return '<button type="button" class="btn btn-primary btn-sm">编辑-'.$id.'</button>';
 //        });
+
+
+        /**
+         * 查询条件
+         */
+        $url = $this->getUrl('api/admin_list');
+        $grid->search('name','昵称',StateRepository::SEARCH_LIKE);
+        $grid->search('created_at','创建时间',StateRepository::SEARCH_TIME_BETWEEN);
+        $grid->search('username','角色',StateRepository::SEARCH_SELETE2)->option([
+            'admin' => '系统管理员',
+            '订单管理员' => '普通管理员'
+        ]);
+        $grid->search('id','管理员',StateRepository::SEARCH_SELETE2_AJAX)->ajax($url);
 
         return $this->gridInit($grid,$met);
     }

@@ -91,4 +91,7 @@ php bin/hyperf.php vendor:publish pl/hyperf-admin
 composer dump-autoload -o
 ```
 
-# 待办
+
+License
+------------
+`hyperf-admin` is licensed under [The MIT License (MIT)](LICENSE).

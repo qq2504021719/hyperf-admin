@@ -22,6 +22,12 @@ class SearchHtml
     public $themeColor;
 
     /**
+     * 可查询字段
+     * @var
+     */
+    public $fields;
+
+    /**
      * 搜索html组合初始化
      * Created by PhpStorm.
      * User: EricPan
@@ -34,6 +40,9 @@ class SearchHtml
      */
     public function htmlInit(RequestInterface $request,$model,$searchs)
     {
+        // fields格式化
+        $this->fields = array_keys($this->fields);
+
         $params = $request->all();
         $page = $this->arrIsKey($params,'page',1);
         $paginate = $this->arrIsKey($params,'paginate',10);
@@ -55,9 +64,12 @@ class SearchHtml
 
                 // 设置默认值
                 $v->data = $this->arrIsKey($params,$v->name,'');
+                if(in_array($v->name,$this->fields))
+                {
+                    // 查询条件处理
+                    $model = $v->queryInit($model);
+                }
 
-                // 查询条件处理
-                $model = $v->queryInit($model);
 
                 // html处理
                 if($i == 0) $htmls .= '<div class="row">';
