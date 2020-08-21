@@ -1,35 +1,20 @@
-# composer 安装
-
+## composer 安装
 ```
 composer require pl/hyperf-admin
 
 ```
 
 # 扩展包
-
-#### [导出安装](https://blog.csdn.net/qq_29755359/article/details/104575938)
-```
-composer require viest/php-ext-xlswriter-ide-helper:dev-master
-
-```
-
-#### [session配置](https://hyperf.wiki/2.0/#/zh-cn/session)
-```
-composer require hyperf/session
-```
+#### [导出配置教程](https://blog.csdn.net/qq_29755359/article/details/104575938)
+#### [session配置教程](https://hyperf.wiki/2.0/#/zh-cn/session)
+#### [视图配置教程](https://hyperf.wiki/2.0/#/zh-cn/view)
+#### [Task配置教程](https://hyperf.wiki/2.0/#/zh-cn/task)
 
 
-#### [视图配置](https://hyperf.wiki/2.0/#/zh-cn/view)
-```
-composer require hyperf/view
-composer require hyperf/task
-composer require duncan3dc/blade
-```
-
-# 配置
+## 配置
 
 #### 日志配置
-```
+```php
 'hyperfadmin' => [
     'handler' => [
         'class' => Monolog\Handler\RotatingFileHandler::class,
@@ -80,12 +65,24 @@ return [
 2020_07_16_102104_create_hyperf_admin_users
 ```
 
-# 发布配置文件
+#### 数据库填充内容
+```SQL
+INSERT INTO `hyperf_admin_users` (`id`, `username`, `password`, `name`, `avatar`, `created_at`, `updated_at`) VALUES ('1', 'admin', 'BOa24Yjd71KPvZWVTyIYGg==', 'admin', 'http://hyperf-admin.it/public/upload/15966093203947.png', '2020-08-05 13:58:08', '2020-08-05 14:35:22');
+```
+
+#### 默认后台地址
+```
+http://xxxx.xxx.xxx/admin/auth
+账号:admin
+密码:123456789
+```
+
+## 发布配置文件
 ```
 php bin/hyperf.php vendor:publish pl/hyperf-admin
 ```
 
-# 执行
+## 执行(更新代码)
 - [参考](https://hyperf.wiki/2.0/#/zh-cn/quick-start/questions)
 ```
 composer dump-autoload -o

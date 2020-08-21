@@ -13,6 +13,7 @@ namespace Pl\HyperfAdmin\Controllers;
 use App\Controller\AbstractController;
 use App\Controller\Success;
 use Hyperf\HttpServer\Annotation\Middleware;
+use Pl\HyperfAdmin\Annotation\RouterController;
 use Pl\HyperfAdmin\Form\Form;
 use Pl\HyperfAdmin\Form\FormSave;
 use Pl\HyperfAdmin\Grid\Grid;
@@ -28,7 +29,7 @@ use Hyperf\HttpServer\Annotation\RequestMapping;
 use Pl\HyperfAdmin\Middleware\HyperfAuthMiddleware;
 
 /**
- * Class HomeController
+ * Class HomeController-RouterController(prefix="users")
  * @package Pl\HyperfAdmin\Controllers
  * @Controller(prefix="/admin/users")
  * @Middleware(HyperfAuthMiddleware::class)
@@ -216,7 +217,7 @@ class UsersController extends HyperfAdminController
     }
 
     /**
-     * 查询数据处理，格式化组合为导出格式
+     * 导出数据处理，格式化组合为导出格式
      * Created by PhpStorm.
      * User: EricPan
      * Date: 2020/7/28
