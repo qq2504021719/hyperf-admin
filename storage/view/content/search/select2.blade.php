@@ -11,19 +11,19 @@
         </select>
     </div>
     <script>
-        var key{{$name}} = '.select2{{$name}}';
-        var val{{$name}} = "{{$data}}";
+        var {{$name}}key = '.select2{{$name}}';
+        var {{$name}}val = "{{$data}}";
 
         // 设置默认选择事件
-        $(key{{$name}}).val(val{{$name}}).select2()
+        $({{$name}}key).val({{$name}}val).select2()
         //初始化Select2
-        $(key{{$name}}).select2({
+        $({{$name}}key).select2({
             placeholder: {id: '', text: "{{$place}}"}, // 同上，这里默认空值为 ''
         })
 
         // 选中事件
-        $(key{{$name}}).on("select2:select", function(e) {
-            var val = $(key{{$name}}).select2("val");
+        $({{$name}}key).on("select2:select", function(e) {
+            var val = $({{$name}}key).select2("val");
             // 设置值
             $('#select2-input-{{$name}}').attr('value',val)
         });

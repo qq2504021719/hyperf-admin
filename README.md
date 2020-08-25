@@ -9,7 +9,7 @@ composer require pl/hyperf-admin
 #### [session配置教程](https://hyperf.wiki/2.0/#/zh-cn/session)
 #### [视图配置教程](https://hyperf.wiki/2.0/#/zh-cn/view)
 #### [Task配置教程](https://hyperf.wiki/2.0/#/zh-cn/task)
-
+#### [validation验证器配置教程](https://hyperf.wiki/2.0/#/zh-cn/validation)
 
 ## 配置
 

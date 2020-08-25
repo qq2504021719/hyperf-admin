@@ -18,7 +18,7 @@ use Hyperf\HttpServer\Annotation\RequestMapping;
 /**
  * Class HomeController
  * @package Pl\HyperfAdmin\Controllers\Api
- * @Controller(prefix="/admin/api")
+ * @Controller(prefix="/ticket/admin/api")
  */
 class FileController extends HyperfAdminController
 {

@@ -199,7 +199,6 @@ class Grid extends HyperfAdmin
     {
         $searchHtml = new SearchHtml();
         $searchHtml->themeColor = $this->themeColor;
-        $searchHtml->fields = $this->fields;
         $re = $searchHtml->htmlInit($request,$this->model,$this->searchs);
         $this->model = $this->arrIsKey($re,'model');
         $this->searchHtml = $this->arrIsKey($re,'html');
@@ -276,14 +275,14 @@ class Grid extends HyperfAdmin
                     $column->isActivity = $this->isShow['isActivity'];
                     $column->isActivityEdit = $this->isShow['isActivityEdit'];
                     $column->isActivityDelete = $this->isShow['isActivityDelete'];
-                    $column->editUrl = $this->route.'/edit';
-                    $column->delUrl = $this->route.'/delete';
+                    $column->editUrl = $this->route.'/'.StateRepository::URL_EDIT;
+                    $column->delUrl = $this->route.'/'.StateRepository::URL_DEL;
 
                     // 自定义html
                     $column->displayHtml();
 
                     // 设置默认html
-                    $column->setHtml();
+                    $column->setHtml($v);
 
                     $this->columns[$key] = $column;
                     // 列html存储数组
@@ -398,6 +397,9 @@ class Grid extends HyperfAdmin
     {
         // script
         $this->html .= '<script>'.$this->getFPathScript().'</script>';
+        
+        // 提示
+        $this->html .= $this->getToastr();
     }
 
     /**
@@ -426,7 +428,8 @@ class Grid extends HyperfAdmin
         // 页面默认script初始化
         $this->contentScriptInit();
 
-        return ViewRepository::viewInitLine($request,$this->html,[],$this->session);
+        $params = $this->layoutScript([]);
+        return ViewRepository::viewInitLine($request,$this->html,$params,$this->session);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Pl\HyperfAdmin\Form;
 use App\Model\Model;
 use Hyperf\DbConnection\Db;
 use Hyperf\HttpServer\Contract\RequestInterface;
+use parallel\Sync\Error;
 use Pl\HyperfAdmin\HyperfAdmin;
 use Pl\HyperfAdmin\Lib\Functions;
 use Pl\HyperfAdmin\Model\HyperfAdminModel;
@@ -64,6 +65,14 @@ class Form extends HyperfAdmin
      */
     public $saveFrontCallback = '';
 
+    /**
+     * 验证是否通过
+     * 验证通过
+     * 验证未通过
+     * @var bool
+     */
+    public $isVerify = false;
+
     public function __construct(Model $model)
     {
         parent::__construct($model);
@@ -85,11 +94,13 @@ class Form extends HyperfAdmin
     {
         $field = new FieldForm($name,$label,$type);
         $field->themeColor = $this->themeColor;
+        $field->met = $this->met;
         $this->forms[$name] = $field;
         $this->fileds[] = $name;
         return $field;
     }
 
+    
     /**
      * 查询数据初始化
      * Created by PhpStorm.
@@ -100,10 +111,26 @@ class Form extends HyperfAdmin
     private function dataInit()
     {
         // 编辑的状态才查询数据、初始化
-        if($this->met === StateRepository::FORM_EDIT)
+        if($this->isVerify === false)
         {
             $id = $this->request->input('id','');
-            $data = $this->model->where('id',$id)->first();
+
+            // 编辑的状态查数据库数据
+            if($this->met === StateRepository::FORM_EDIT)
+            {
+                $data = $this->model->where('id',$id)->first();
+            }
+            // 编辑保存
+            else if($this->met === StateRepository::FORM_EDIT_SAVE)
+            {
+                $data = $this->model->where('id',$id)->first();
+            }
+            else if($this->met === StateRepository::FORM_ADD_SAVE)
+            {
+                $data = $this->request->all();
+            }
+            // 添加的状态从参数获取
+
             if($data)
             {
                 foreach ($this->fileds as $v)
@@ -169,11 +196,11 @@ class Form extends HyperfAdmin
         $url = '';
         if($this->met == StateRepository::FORM_ADD)
         {
-            $url = $this->getUrl($this->route.'/'.StateRepository::URL_ADD_SAVE);
+            $url = $this->getUrl($this->route.'/'.StateRepository::URL_ADD_SAVE.'?id='.$this->id);
         }
         else
         {
-            $url = $this->getUrl($this->route.'/'.StateRepository::URL_EDIT_SAVE);
+            $url = $this->getUrl($this->route.'/'.StateRepository::URL_EDIT_SAVE.'?id='.$this->id);
         }
         return $url;
     }
@@ -189,6 +216,9 @@ class Form extends HyperfAdmin
     {
         // script
         $this->html .= '<script>'.$this->getFPathScript().'</script>';
+
+        // 提示
+        $this->html .= $this->getToastr();
     }
 
     /**
@@ -202,7 +232,6 @@ class Form extends HyperfAdmin
     public function html()
     {
         $this->id = $this->request->input('id');
-
         // 头部信息
         $this->contentHeader();
         // 查询数据初始化
@@ -214,7 +243,57 @@ class Form extends HyperfAdmin
         // 页面默认script初始化
         $this->contentScriptInit();
 
-        return ViewRepository::viewInitLine($this->request,$this->html,[],$this->session);
+        $params = $this->layoutScript([]);
+        return ViewRepository::viewInitLine($this->request,$this->html,$params,$this->session);
+    }
+
+
+    /**
+     * 验证
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/24
+     * Time: 17:50
+     */
+    public function verify()
+    {
+
+        $this->isVerify = true;
+        $rules = [];
+        $messages = [];
+        // 验证规则拼接
+        foreach ($this->forms as $k=>$v)
+        {
+            $name = $v->name;
+            $rule = $v->rule;
+            $message = $v->message;
+            if($rule)$rules[$k] = $rule;
+            if(is_array($message) && count($message) > 0){
+                foreach ($message as $k=>$v1)
+                {
+                    $messages[$name.'.'.$k] = $v1;
+                }
+            }
+        }
+
+        if(count($rules))
+        {
+            // 验证
+            $validator = $this->validationFactory->make(
+                $this->request->all(),
+                $rules,
+                $messages
+            );
+
+            if ($validator->fails()){
+                $this->isVerify = false;
+                $arr = $validator->errors()->getMessages();
+                foreach ($arr as $k=>$v)
+                {
+                    $this->forms[$k]->errorStr = implode(',',$v);
+                }
+            }
+        }
     }
 
 

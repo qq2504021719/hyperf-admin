@@ -1,5 +1,8 @@
 <?php
 namespace Pl\HyperfAdmin\Lib;
+
+use Hyperf\Di\Annotation\Inject;
+
 /**
  * Created by PhpStorm.
  * User: EricPan
@@ -9,6 +12,7 @@ namespace Pl\HyperfAdmin\Lib;
 
 trait Functions
 {
+
     /**
      * 判断数组指定下标是否存在,存在则返回数据
      * Created by PhpStorm.

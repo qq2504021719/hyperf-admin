@@ -1,8 +1,19 @@
 <div class="form-group row">
     <label class="col-sm-1 col-form-label">{{$label}}</label>
     <div class="col-sm-11">
-        <input type="file" class="custom-file-input" id="{{$name}}uploadFile" >
+        <input type="file" class="custom-file-input form-control @if($errorStr) is-invalid @endif" id="{{$name}}uploadFile" >
         <input name="{{$name}}" type="hidden" value="{{$valueData}}" id="{{$name}}uploadFile-value">
+        @if($errorStr)
+            <div class="invalid-feedback">
+                {{$errorStr}}
+            </div>
+        @endif
+
+        @if($help)
+            <small id="passwordHelpInline" class="text-muted">
+                {{$help}}
+            </small>
+        @endif
     </div>
 </div>
 <script>
@@ -16,7 +27,7 @@ var num{{$name}} = 0;
 @endif
     $("#{{$name}}uploadFile").fileinput({
         language: 'zh', //设置语言
-        uploadUrl:"/admin/api/img_upload", //上传的地址
+        uploadUrl:"{{$url}}", //上传的地址
         allowedFileExtensions: ['jpg', 'gif', 'png','jpge'],//接收的文件后缀
         //uploadExtraData:{"id": 1, "fileName":'123.mp3'},
         uploadAsync: true, //默认异步上传

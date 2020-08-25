@@ -9,15 +9,19 @@
 namespace Pl\HyperfAdmin;
 
 use App\Model\Model;
+use Hyperf\Di\Annotation\Inject;
 use Hyperf\Contract\SessionInterface;
 use Hyperf\HttpServer\Contract\RequestInterface;
+use Pl\HyperfAdmin\Lib\Functions;
 use Pl\HyperfAdmin\Model\HyperfAdminModel;
 use Pl\HyperfAdmin\Repository\StateRepository;
 use Pl\HyperfAdmin\Repository\TemplateEngineRepository;
+use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 use Pl\HyperfAdmin\Repository\ViewRepository;
 
 class HyperfAdmin
 {
+    use Functions;
     /**
      * 请求
      * @var RequestInterface
@@ -35,6 +39,12 @@ class HyperfAdmin
      * @var SessionInterface
      */
     public $session;
+
+    /**
+     * @Inject()
+     * @var ValidatorFactoryInterface
+     */
+    public $validationFactory;
 
     /**
      * 标题
@@ -153,4 +163,46 @@ class HyperfAdmin
     {
         return "var f_path = '/".config('hyperf-admin.route.prefix').$this->route."'";
     }
+
+    /**
+     * 页面提示
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/25
+     * Time: 14:42
+     */
+    public function getToastr()
+    {
+        $re = '';
+        $key = StateRepository::TOASTR_NAME;
+        $data = $this->session->get($key);
+        $this->session->set($key,[]);
+        $str = $this->arrIsKey($data,'str');
+        $type = $this->arrIsKey($data,'type');
+        $title = $this->arrIsKey($data,'title');
+        if($str && $type)
+        {
+            if($title) $title = ',"'.$title.'"';
+            $re = '<script>toastr.'.$type.'("'.$str.'"'.$title.')</script>';
+        }
+        return $re;
+    }
+
+    /**
+     * 模版script
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/25
+     * Time: 15:13
+     * @param $data
+     */
+    public function layoutScript($data)
+    {
+        //不存在创建
+        if(!isset($data['script'])) $data['script'] = '';
+        // 页面提示
+        $data['script'] .= $this->getToastr();
+        return $data;
+    }
+
 }

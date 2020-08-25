@@ -60,6 +60,18 @@ abstract class HyperfAdminController
      */
     protected $session;
 
+    /**
+     * 副标题
+     * @var string
+     */
+    protected $subTitle = '';
+
+    /**
+     * 面包屑
+     * @var array
+     */
+    protected $breadcrumb = [];
+
 
     /**
      * 路由前缀拼接
@@ -143,17 +155,43 @@ abstract class HyperfAdminController
                 return $form->html();
                 break;
             case StateRepository::FORM_EDIT_SAVE:
+                $form->verify();
                 return $form;
                 break;
             case StateRepository::FORM_ADD:
                 return $form->html();
                 break;
             case StateRepository::FORM_ADD_SAVE:
+                $form->verify();
                 return $form;
                 break;
         }
 
         return $form;
+    }
+
+    /**
+     * 面包屑初始化
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/25
+     * Time: 11:32
+     * @param $path
+     * @param int $type
+     */
+    public function breadcrumbInit($path,$type = 1)
+    {
+        $url = $type==1?StateRepository::URL_EDIT:StateRepository::URL_ADD;
+        $str = $type==1?'编辑':'添加';
+
+        $this->breadcrumb = [
+            [
+                'path' => $path.'/'.$url,
+                'active' => 'active',
+                'name' => $str
+            ]
+        ];
+        $this->subTitle = $str;
     }
 
     /**
@@ -183,5 +221,24 @@ abstract class HyperfAdminController
         });
 
         return $this->response->json(Success::success(Success::success,$re));
+    }
+
+    /**
+     * 页面提示
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/25
+     * Time: 14:31
+     * @param $str
+     * @param string $type
+     * @param string $title 标题
+     */
+    public function setToastr($str, $type = 'success',$title = '')
+    {
+        $this->session->set(StateRepository::TOASTR_NAME,[
+            'str' => $str,
+            'type' => $type,
+            'title' => $title
+        ]);
     }
 }

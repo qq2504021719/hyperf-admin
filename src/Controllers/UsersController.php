@@ -13,7 +13,6 @@ namespace Pl\HyperfAdmin\Controllers;
 use App\Controller\AbstractController;
 use App\Controller\Success;
 use Hyperf\HttpServer\Annotation\Middleware;
-use Pl\HyperfAdmin\Annotation\RouterController;
 use Pl\HyperfAdmin\Form\Form;
 use Pl\HyperfAdmin\Form\FormSave;
 use Pl\HyperfAdmin\Grid\Grid;
@@ -29,9 +28,9 @@ use Hyperf\HttpServer\Annotation\RequestMapping;
 use Pl\HyperfAdmin\Middleware\HyperfAuthMiddleware;
 
 /**
- * Class HomeController-RouterController(prefix="users")
+ * Class HomeController
  * @package Pl\HyperfAdmin\Controllers
- * @Controller(prefix="/admin/users")
+ * @Controller(prefix="/ticket/admin/users")
  * @Middleware(HyperfAuthMiddleware::class)
  */
 class UsersController extends HyperfAdminController
@@ -77,7 +76,14 @@ class UsersController extends HyperfAdminController
         $grid->model->orderBy('id','DESC');
         $grid->isIndex = true;
 
-
+        $url = $this->getUrl('api/admin_list');
+        $grid->search('name','昵称',StateRepository::SEARCH_LIKE);
+        $grid->search('created_at','创建时间',StateRepository::SEARCH_TIME_BETWEEN);
+        $grid->search('username','角色',StateRepository::SEARCH_SELETE2)->option([
+            'admin' => '系统管理员',
+            '订单管理员' => '普通管理员'
+        ]);
+        $grid->search('id','管理员',StateRepository::SEARCH_SELETE2_AJAX)->ajax($url);
 
 
         $grid->column('id','ID');
@@ -89,19 +95,6 @@ class UsersController extends HyperfAdminController
 //            $id = $this->arrIsKey($data,'id');
 //            return '<button type="button" class="btn btn-primary btn-sm">编辑-'.$id.'</button>';
 //        });
-
-
-        /**
-         * 查询条件
-         */
-        $url = $this->getUrl('api/admin_list');
-        $grid->search('name','昵称',StateRepository::SEARCH_LIKE);
-        $grid->search('created_at','创建时间',StateRepository::SEARCH_TIME_BETWEEN);
-        $grid->search('username','角色',StateRepository::SEARCH_SELETE2)->option([
-            'admin' => '系统管理员',
-            '订单管理员' => '普通管理员'
-        ]);
-        $grid->search('id','管理员',StateRepository::SEARCH_SELETE2_AJAX)->ajax($url);
 
         return $this->gridInit($grid,$met);
     }
@@ -217,7 +210,7 @@ class UsersController extends HyperfAdminController
     }
 
     /**
-     * 导出数据处理，格式化组合为导出格式
+     * 查询数据处理，格式化组合为导出格式
      * Created by PhpStorm.
      * User: EricPan
      * Date: 2020/7/28

@@ -175,13 +175,10 @@ class ExcelZipRepository
         ini_set("memory_limit","1024M");
         $name = $this->excel_name;
         $count = $this->count;
-        $path =  __DIR__.'/../../../../../public/'.$this->path;
-        $excelName = $this->excel_name.'.xlsx';
-        $config   = ['path' => $path];
+        $config   = ['path' => __DIR__.'/../../../../../public/'.$this->path];
         $excel  = new \Vtiful\Kernel\Excel($config);
 
-        $excel->fileName($excelName, 'sheet1');
-
+        $excel->fileName($this->excel_name.'.xlsx', 'sheet1');
         $excel = $this->excel_sheet($callback,$excel);
         $filePath = $excel->output();
     }

@@ -43,6 +43,7 @@ class StateRepository
     const FORM_MANY_UPLOAD          = 'many_upload';                        // 多选上传
     const FORM_SELECT               = 'select';                             // 下拉框
     const FORM_SELECT_AJAX          = 'select_ajax';                        // 下拉框ajax加载
+    const FORM_TIME                 = 'time';                               // 日期选择
     const FORM_CHECKBOX             = 'checkbox';                           // 多选
     const FORM_RADIO                = 'radio';                              // 单选
     const FORM_EDIT                 = 'edit';                               // 编辑
@@ -65,4 +66,19 @@ class StateRepository
     const URL_EDIT_SAVE             = 'edit_save';                          // 编辑保存
     const URL_ADD                   = 'add';                                // 添加
     const URL_ADD_SAVE              = 'add_save';                           // 添加保存
+    const URL_DEL                   = 'delete';                             // 删除
+
+    /**
+     * SESSION键名
+     */
+    const TOASTR_NAME               = 'toastr';                             // 提示键名
+    
+    /**
+     * Toastr提示类型
+     */
+    const TOASTR_WARNING            = 'warning';                            // 警告
+    const TOASTR_SUCCESS            = 'success';                            // 成功
+    const TOASTR_ERROR              = 'error';                              // 错误
+    const TOASTR_INFO               = 'info';                               // 提示
+
 }

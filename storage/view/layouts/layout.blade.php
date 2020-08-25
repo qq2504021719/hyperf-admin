@@ -81,6 +81,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/fileinput.zh.js"></script>
     <!-- 帮助方法 -->
     <script src="{{config('hyperf-admin.app_host')}}/public/vendor/dist/js/functions.js"></script>
+
     <script>
         // 父路由
         var f_path = '';
@@ -189,7 +190,6 @@ function pjaxDone()
 
     // 关闭刷新转动
     $('#view-fa-refresh').attr('class','fas fa-refresh');
-
 }
 
 // 进度条配置
@@ -257,8 +257,10 @@ $(document).on('pjax:end', function() {
 navInit();
 // #################### jquery pjax end ####################
 
-
-
 </script>
+
+
+{{--代码配置script--}}
+{{$script}}
 
 </html>

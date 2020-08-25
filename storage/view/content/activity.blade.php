@@ -5,6 +5,8 @@
         </a>
     @endif
     @if($isActivityDelete)
-    <button type="button" class="btn btn-danger btn-sm">删除</button>
+            <a href="javascript:void(0)" onclick="viewFaRe('{{$delUrl}}',2)">
+                <button type="button" class="btn btn-danger btn-sm">删除</button>
+            </a>
     @endif
 </td>

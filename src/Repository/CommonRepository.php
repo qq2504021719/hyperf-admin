@@ -9,11 +9,13 @@
 namespace Pl\HyperfAdmin\Repository;
 
 
+use PDepend\Source\AST\State;
 use Pl\HyperfAdmin\Lib\Functions;
 
 class CommonRepository
 {
     use Functions;
+    
     /**
      * 文件上传 \League\Flysystem\Filesystem
      * Created by PhpStorm.
@@ -31,6 +33,7 @@ class CommonRepository
         $file =$request->file($key);
         $path = 'public/upload/'.time().mt_rand(1,10000).'.'.$file->getExtension();
         $file->moveTo($path);
+        chmod($path,0777);
         if($path)
         {
 //            if($is == 1)
