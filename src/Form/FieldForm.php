@@ -91,6 +91,11 @@ class FieldForm
      */
     public $message = [];
 
+    /**
+     * @var string
+     */
+    private $inputType = '';
+
 
     public function __construct($name,$label,$type = StateRepository::FORM_TEXT)
     {
@@ -192,8 +197,31 @@ class FieldForm
         // 只有添加页面的时候才使用默认值
         if($this->met == StateRepository::FORM_ADD || $this->met == StateRepository::FORM_EDIT_SAVE)
         {
+
+        }
+
+        if(!$this->data && $this->data !== 0)
+        {
             $this->data = $data;
         }
+
+        // 或者修改时data没有值
+        return $this;
+    }
+
+
+    /**
+     * 隐藏表单
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/26
+     * Time: 17:10
+     * @return $this
+     */
+    public function hidden()
+    {
+        $this->setInputType(StateRepository::FORM_INPUT_HIDDEN);
+
         return $this;
     }
 
@@ -214,6 +242,7 @@ class FieldForm
         $data['data'] = $this->data;
         $data['isRequest'] = $this->isRequest;
         $data['help'] = $this->help;
+        $data['inputType'] = $this->inputType;
         return $data;
     }
 
@@ -227,6 +256,7 @@ class FieldForm
      */
     private function getTextHtml()
     {
+        $this->setInputType(StateRepository::FORM_INPUT_TEXT);
         $html = ViewRepository::viewInitLineCom('content.form.text',$this->dataInit([
             'placeholder' => '请输入值',
         ]));
@@ -243,6 +273,7 @@ class FieldForm
      */
     private function getSelectHtml()
     {
+        $this->setInputType(StateRepository::FORM_INPUT_HIDDEN);
         $html = ViewRepository::viewInitLineCom('content.form.select',$this->dataInit([
             'option' => $this->option,
             'placeholder' => '请选择',
@@ -260,6 +291,7 @@ class FieldForm
      */
     private function getTimeHtml()
     {
+        $this->setInputType(StateRepository::FORM_INPUT_TEXT);
         $html = ViewRepository::viewInitLineCom('content.form.time',$this->dataInit([
             'placeholder' => '请选择日期',
         ]));
@@ -276,6 +308,7 @@ class FieldForm
      */
     private function getUploadHtml()
     {
+        $this->setInputType(StateRepository::FORM_INPUT_FILE);
         $data = [];
         if($this->data)
         {
@@ -292,5 +325,21 @@ class FieldForm
         ]);
         $html = ViewRepository::viewInitLineCom('content.form.upload',$re);
         return $html;
+    }
+
+    /**
+     * 设置input类型
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/26
+     * Time: 17:23
+     * @param $str
+     */
+    private function setInputType($str)
+    {
+        if(!$this->inputType)
+        {
+            $this->inputType = $str;
+        }
     }
 }
