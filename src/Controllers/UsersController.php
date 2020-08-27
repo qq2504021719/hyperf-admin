@@ -30,7 +30,7 @@ use Pl\HyperfAdmin\Middleware\HyperfAuthMiddleware;
 /**
  * Class HomeController
  * @package Pl\HyperfAdmin\Controllers
- * @Controller(prefix="/ticket/admin/users")
+ * @Controller(prefix="/admin/users")
  * @Middleware(HyperfAuthMiddleware::class)
  */
 class UsersController extends HyperfAdminController
@@ -40,7 +40,7 @@ class UsersController extends HyperfAdminController
      * 标题
      * @var string
      */
-    protected $title = '管理员';
+    public $title = '管理员';
 
     /**
      * 副标题
@@ -69,7 +69,7 @@ class UsersController extends HyperfAdminController
      * @param Grid $met
      * @return mixed
      */
-    private function grid($met)
+    public function grid($met)
     {
         $grid = new Grid(new AdminUsers());
         $grid->displayActivityDel();
@@ -100,6 +100,31 @@ class UsersController extends HyperfAdminController
     }
 
     /**
+     * form设置
+     * 编辑-添加字段设置
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/30
+     * Time: 17:03
+     * @param $met
+     */
+    public function form($met)
+    {
+        $form = new Form(new AdminUsers());
+        $form->met = $met;
+
+        $form->field('avatar','头像',StateRepository::FORM_UPLOAD);
+        $form->field('name','昵称')->rule('required',[
+            'required' => '昵称不能为空'
+        ]);
+        $form->field('username','账号');
+        $form->field('password','密码');
+
+        return $this->formInit($form,$met);
+    }
+
+
+    /**
      * 列表页
      * @RequestMapping(path="")
      * Created by PhpStorm.
@@ -110,36 +135,11 @@ class UsersController extends HyperfAdminController
      */
     public function index()
     {
-
-        $this->breadcrumb = [];
-        $this->subTitle = '列表';
-
-
-        return $this->grid(StateRepository::GRID_LIST);
+        return $this->indexView($this);
     }
 
     /**
-     * form设置
-     * 编辑-添加字段设置
-     * Created by PhpStorm.
-     * User: EricPan
-     * Date: 2020/7/30
-     * Time: 17:03
-     * @param $met
-     */
-    private function form($met)
-    {
-        $form = new Form(new AdminUsers());
-
-        $form->field('avatar','头像',StateRepository::FORM_UPLOAD);
-        $form->field('name','昵称');
-        $form->field('username','账号');
-        $form->field('password','密码');
-
-        return $this->formInit($form,$met);
-    }
-
-    /**
+     * 修改
      * @RequestMapping(path="edit")
      * Created by PhpStorm.
      * User: EricPan
@@ -149,19 +149,11 @@ class UsersController extends HyperfAdminController
      */
     public function edit()
     {
-        $this->breadcrumb = [
-            [
-                'path' => '/users/edit',
-                'active' => 'active',
-                'name' => '编辑'
-            ]
-        ];
-        $this->subTitle = '编辑';
-
-        return $this->form(StateRepository::FORM_EDIT);
+        return $this->editView($this);
     }
 
     /**
+     * 修改保存
      * @RequestMapping(path="edit_save")
      * Created by PhpStorm.
      * User: EricPan
@@ -171,26 +163,69 @@ class UsersController extends HyperfAdminController
      */
     public function editSave()
     {
-        // 验证
-        $id = $this->request->input('id');
-        $password = $this->request->input('password');
 
+        $that = $this;
+        return $this->editSaveView($that,function ($that,$form){
+            $id = $that->request->input('id');
+            $password = $that->request->input('password');
+            /**
+             * 查询是否加密密码
+             * 本次密码和数据库的不相等
+             */
+            $data = AdminUsers::query()->where('id',$id)->first();
+            if($that->arrIsKey($data,'password') != $password) $form = $that->saveFrontCallback($form);
+            return $form;
+        });
+    }
 
-        // 验证成功
-        $form = $this->form(StateRepository::FORM_EDIT_SAVE);
-        $form->isLockForUpdate = true;
+    /**
+     * 添加
+     * @RequestMapping(path="add")
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/15
+     * Time: 17:02
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function add()
+    {
+        return $this->addView($this);
+    }
 
-        /**
-         * 查询是否加密密码
-         * 本次密码和数据库的不相等
-         */
-        $data = AdminUsers::query()->where('id',$id)->first();
-        if($this->arrIsKey($data,'password') != $password) $form = $this->saveFrontCallback($form);
+    /**
+     * 添加保存
+     * @RequestMapping(path="add_save")
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/5
+     * Time: 9:43
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function addSave()
+    {
+        return $this->addSaveView($this);
+    }
 
-        $form->editSave();
-
-        // 返回首页
-        return $this->response->redirect($this->getUrl($this->fPath));
+    /**
+     * 保存前回调
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/5
+     * Time: 14:14
+     * @param Form $form
+     * @return Form
+     */
+    public function saveFrontCallback(Form $form)
+    {
+        $that = $this;
+        // 保存前回调
+        $form->saveFrontCallback = function ($params) use($that){
+            $password = $that->arrIsKey($params,'password');
+            $password = AESRepository::encrypt($password);
+            $params['password'] = $password;
+            return $params;
+        };
+        return $form;
     }
 
     /**
@@ -203,10 +238,7 @@ class UsersController extends HyperfAdminController
      */
     public function excel()
     {
-        $query = $this->grid(StateRepository::GRID_EXCEL);
-        return $this->excelInit($query,'管理员管理',function ($data){
-            return $this->excelDataInit($data);
-        });
+        return $this->excelView($this);
     }
 
     /**
@@ -218,7 +250,7 @@ class UsersController extends HyperfAdminController
      * @param $data
      * @return array
      */
-    private function excelDataInit($data)
+    public function excelDataInit($data)
     {
         $rows = [];
 
@@ -239,70 +271,4 @@ class UsersController extends HyperfAdminController
 
         return $rows;
     }
-
-    /**
-     * @RequestMapping(path="add")
-     * Created by PhpStorm.
-     * User: EricPan
-     * Date: 2020/7/15
-     * Time: 17:02
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function add()
-    {
-
-        $this->breadcrumb = [
-            [
-                'path' => '/users/add',
-                'active' => 'active',
-                'name' => '添加'
-            ]
-        ];
-        $this->subTitle = '添加';
-
-        return $this->form(StateRepository::FORM_ADD);
-    }
-
-    /**
-     * 保存前回调
-     * Created by PhpStorm.
-     * User: EricPan
-     * Date: 2020/8/5
-     * Time: 14:14
-     * @param Form $form
-     * @return Form
-     */
-    private function saveFrontCallback(Form $form)
-    {
-        $that = $this;
-        // 保存前回调
-        $form->saveFrontCallback = function ($params) use($that){
-            $password = $that->arrIsKey($params,'password');
-            $password = AESRepository::encrypt($password);
-            $params['password'] = $password;
-            return $params;
-        };
-        return $form;
-    }
-
-    /**
-     * @RequestMapping(path="add_save")
-     * Created by PhpStorm.
-     * User: EricPan
-     * Date: 2020/8/5
-     * Time: 9:43
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function addSave()
-    {
-        // 验证成功
-        $form = $this->form(StateRepository::FORM_ADD_SAVE);
-        $form = $this->saveFrontCallback($form);
-        $form->addSave();
-
-        // 返回首页
-        return $this->response->redirect($this->getUrl($this->fPath));
-    }
-
-
 }

@@ -22,7 +22,7 @@ use Pl\HyperfAdmin\Repository\ViewRepository;
 /**
  * Class AuthController
  * @package Pl\HyperfAdmin\Controllers
- * @Controller(prefix="/ticket/admin/auth")
+ * @Controller(prefix="/admin/auth")
  */
 class AuthController extends HyperfAdminController
 {

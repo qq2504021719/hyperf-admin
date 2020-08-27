@@ -102,7 +102,6 @@ class HyperfAdmin
         $this->render = new TemplateEngineRepository();
         $this->modelM = $model;
         $this->model = $model->newModelQuery();
-
     }
 
     /**

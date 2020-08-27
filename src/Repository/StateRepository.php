@@ -52,6 +52,9 @@ class StateRepository
     const FORM_ADD_SAVE             = 'add_save';                           // 添加保存
     const GRID_LIST                 = 'list';                               // list
     const GRID_EXCEL                = 'excel';                              // 导出
+    const FORM_INPUT_TEXT           = 'text';                               // input文本类型-文本
+    const FORM_INPUT_HIDDEN         = 'hidden';                             // input文本类型-隐藏
+    const FORM_INPUT_FILE           = 'file';                               // input文本类型-文件
 
 
 
@@ -72,7 +75,7 @@ class StateRepository
      * SESSION键名
      */
     const TOASTR_NAME               = 'toastr';                             // 提示键名
-    
+
     /**
      * Toastr提示类型
      */

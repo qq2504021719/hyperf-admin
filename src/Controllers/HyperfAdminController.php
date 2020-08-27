@@ -12,6 +12,8 @@ use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\View\RenderInterface;
+use Hyperf\HttpServer\Annotation\RequestMapping;
+use Psr\Container\ContainerInterface;
 use Pl\HyperfAdmin\Form\Form;
 use Pl\HyperfAdmin\Grid\Grid;
 use Pl\HyperfAdmin\HyperfAdmin;
@@ -19,7 +21,6 @@ use Pl\HyperfAdmin\Repository\ExcelZipRepository;
 use Pl\HyperfAdmin\Repository\StateRepository;
 use Pl\HyperfAdmin\Repository\Success;
 use Pl\HyperfAdmin\Repository\TemplateEngineRepository;
-use Psr\Container\ContainerInterface;
 
 /**
  * Class HyperfAdminController
@@ -241,4 +242,149 @@ abstract class HyperfAdminController
             'title' => $title
         ]);
     }
+
+    /**
+     * 列表页
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/27
+     * Time: 13:18
+     * @param $that
+     * @return mixed
+     */
+    protected function indexView($that)
+    {
+        $that->breadcrumb = [];
+        $that->subTitle = '列表';
+        return $that->grid(StateRepository::GRID_LIST);
+    }
+
+    /**
+     * 修改页面
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/27
+     * Time: 13:18
+     * @param $that
+     * @return mixed
+     */
+    protected function editView($that)
+    {
+        $that->breadcrumbInit($that->fPath,1);
+        return $that->form(StateRepository::FORM_EDIT);
+    }
+
+    /**
+     * 修改保存页面
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/27
+     * Time: 13:24
+     * @param $that
+     * @param $callback 保存前回调
+     * @return mixed
+     */
+    protected function editSaveView($that,$callback = '')
+    {
+        // 验证
+        $form = $that->form(StateRepository::FORM_EDIT_SAVE);
+        // 验证失败
+        if($form->isVerify === false)
+        {
+            $that->breadcrumbInit($that->fPath,1);
+            return $form->html();
+        }
+        $form->isLockForUpdate = true;
+
+        // 回调方法
+        if($callback)
+        {
+            $form = $callback($that,$form);
+        }
+
+        if(method_exists($that,'saveFrontCallback'))
+        {
+            // 保存前回调
+            $form = $this->saveFrontCallback($form);
+        }
+
+        $form->editSave();
+
+        // 返回首页
+        return $that->response->redirect($that->getUrl($that->fPath));
+    }
+
+    /**
+     * 添加页面初始化
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/27
+     * Time: 13:52
+     * @param $that
+     * @return mixed
+     */
+    protected function addView($that)
+    {
+        $that->breadcrumbInit($that->fPath,2);
+
+        return $that->form(StateRepository::FORM_ADD);
+    }
+
+    /**
+     * 添加保存初始化
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/27
+     * Time: 14:02
+     * @param $that
+     * @param string $callback
+     * @return mixed
+     */
+    protected function addSaveView($that,$callback = '')
+    {
+        // 验证
+        $form = $that->form(StateRepository::FORM_ADD_SAVE);
+        // 验证失败
+        if($form->isVerify === false)
+        {
+            $that->breadcrumbInit($that->fPath,2);
+            return $form->html();
+        }
+
+        // 回调方法
+        if($callback)
+        {
+            $form = $callback($that,$form);
+        }
+
+
+        if(method_exists($that,'saveFrontCallback'))
+        {
+            // 保存前回调
+            $form = $this->saveFrontCallback($form);
+        }
+
+        $form->addSave();
+
+        // 返回首页
+        return $that->response->redirect($that->getUrl($that->fPath));
+    }
+
+    /**
+     * 导出初始化
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/27
+     * Time: 13:35
+     * @param $that
+     * @return mixed
+     */
+    protected function excelView($that)
+    {
+        $query = $that->grid(StateRepository::GRID_EXCEL);
+        return $this->excelInit($query,$that->title,function ($data) use($that){
+            return $that->excelDataInit($data);
+        });
+    }
+
 }

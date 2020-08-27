@@ -10,7 +10,7 @@ use Pl\HyperfAdmin\Model\AdminUsers;
 /**
  * Class HomeController
  * @package Pl\HyperfAdmin\Controllers\Api
- * @Controller(prefix="/ticket/admin/api")
+ * @Controller(prefix="/admin/api")
  */
 class adminApiController extends HyperfAdminController
 {

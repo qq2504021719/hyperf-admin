@@ -9,11 +9,7 @@ namespace Pl\HyperfAdmin\Model;
  */
 
 use App\Model\Model;
-use Hyperf\DbConnection\Model\Model as BaseModel;
-use Hyperf\ModelCache\Cacheable;
-use Hyperf\ModelCache\CacheableInterface;
 
-abstract class HyperfAdminModel extends Model implements CacheableInterface
+abstract class HyperfAdminModel extends Model
 {
-    use Cacheable;
 }
