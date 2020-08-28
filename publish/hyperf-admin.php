@@ -38,6 +38,11 @@ return [
     'logo' =>'/public/vendor/dist/img/AdminLTELogo.png',
 
     /**
+     * 代码存放目录
+     */
+    'code_path' => 'HyperfAdmin',
+
+    /**
      * 模板前缀
      */
     'view_template_prefix' => '',
@@ -69,26 +74,19 @@ return [
 //            'icon' => 'fas fa-tachometer-alt',
 //            'subset' => []
 //        ],
-//        [
-//            'id' => 1,
-//            'name' => 'Test菜单',
-//            'path' => '',
-//            'icon' => 'fas fa-tachometer-alt',
-//            'subset' => [
-//                [
-//                    'id' => 2,
-//                    'f_id' => 1,
-//                    'name' => 'Test首页',
-//                    'icon' => 'far fa-circle',
-//                    'path' => '/testindex1',
-//                ],
-//                [
-//                    'id' => 3,
-//                    'f_id' => 1,
-//                    'name' => 'Test',
-//                    'icon' => 'far fa-circle',
-//                    'path' => '/test',
-//                ],
+        [
+            'id' => 1,
+            'name' => '抽奖管理',
+            'path' => '',
+            'icon' => 'fas fa-tachometer-alt',
+            'subset' => [
+                [
+                    'id' => 2,
+                    'f_id' => 1,
+                    'name' => '奖项管理',
+                    'icon' => 'far fa-circle',
+                    'path' => '/Base/Prizes',
+                ],
 //                [
 //                    'id' => 4,
 //                    'f_id' => 1,
@@ -96,8 +94,8 @@ return [
 //                    'icon' => 'far fa-circle',
 //                    'path' => '/test1',
 //                ],
-//            ],
-//        ],
+            ],
+        ],
         [
             'id' => 5,
             'name' => '系统',

@@ -88,6 +88,19 @@ php bin/hyperf.php vendor:publish pl/hyperf-admin
 composer dump-autoload -o
 ```
 
+## 快速开始
+
+#### 1.生成控制器示例
+
+> 生成后重启,如果访问不存在，执行下更新代码命令，再重启
+
+```
+php bin/hyperf.php hyperf-admin:command Base/Prizes App/Model/Prizes  
+```
+
+## 注意
+
+- 1.发布配置文件或生成控制器后，如果重启代码没有生效，执行下更新代码命令，再重启
 
 License
 ------------

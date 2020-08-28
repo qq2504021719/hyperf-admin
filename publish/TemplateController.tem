@@ -1,0 +1,231 @@
+<?php
+/**
+ * 后台用户管理
+ * Created by PhpStorm.
+ * User: EricPan
+ * Date: 2020/7/15
+ * Time: 14:09
+ */
+
+namespace App\{namespace};
+
+
+use Hyperf\HttpServer\Annotation\Middleware;
+use Hyperf\HttpServer\Annotation\Controller;
+use Pl\HyperfAdmin\Controllers\HyperfAdminController;
+use Pl\HyperfAdmin\Form\Form;
+use Pl\HyperfAdmin\Grid\Grid;
+use Pl\HyperfAdmin\Lib\Functions;
+use Pl\HyperfAdmin\Repository\StateRepository;
+use Hyperf\HttpServer\Annotation\RequestMapping;
+use Pl\HyperfAdmin\Middleware\HyperfAuthMiddleware;
+use {modelNamespace}\{model};
+
+/**
+ * Class {name}Controller
+ * @package App\{namespace}
+ * @Controller(prefix="{prefix}{route}")
+ * @Middleware(HyperfAuthMiddleware::class)
+ */
+class {name}Controller extends HyperfAdminController
+{
+    use Functions;
+    /**
+     * 标题
+     * @var string
+     */
+    protected $title = '模板';
+
+    /**
+     * 副标题
+     * @var string
+     */
+    protected $subTitle = '';
+
+    /**
+     * 面包屑
+     * @var array
+     */
+    public $breadcrumb = [];
+
+    /**
+     * 父级路由
+     * @var string
+     */
+    public $fPath = '{route}';
+
+    /**
+     * grid配置
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/5
+     * Time: 15:31
+     * @param Grid $met
+     * @return mixed
+     */
+    public function grid($met)
+    {
+        $grid = new Grid(new {model}());
+        $grid->displayActivityDel();
+        $grid->model->orderBy('id','DESC');
+        $grid->isIndex = true;
+
+        $grid->search('id','ID',StateRepository::SEARCH_EQUAL);
+
+
+        $grid->column('id','ID');
+        $grid->column('created_at','创建时间');
+
+        return $this->gridInit($grid,$met);
+    }
+
+    /**
+     * form设置
+     * 编辑-添加字段设置
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/30
+     * Time: 17:03
+     * @param $met
+     * @return Form|\Psr\Http\Message\ResponseInterface
+     */
+    public function form($met)
+    {
+        $form = new Form(new {model}());
+        $form->met = $met;
+
+        return $this->formInit($form,$met);
+    }
+
+
+    /**
+     * 列表页
+     * @RequestMapping(path="")
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/15
+     * Time: 14:36
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function index()
+    {
+        return $this->indexView($this);
+    }
+
+    /**
+     * 修改
+     * @RequestMapping(path="edit")
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/15
+     * Time: 17:02
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function edit()
+    {
+        return $this->editView($this);
+    }
+
+    /**
+     * 修改保存
+     * @RequestMapping(path="edit_save")
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/5
+     * Time: 9:43
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function editSave()
+    {
+
+        $that = $this;
+        return $this->editSaveView($that);
+    }
+
+    /**
+     * 添加
+     * @RequestMapping(path="add")
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/15
+     * Time: 17:02
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function add()
+    {
+        return $this->addView($this);
+    }
+
+    /**
+     * 添加保存
+     * @RequestMapping(path="add_save")
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/5
+     * Time: 9:43
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function addSave()
+    {
+        return $this->addSaveView($this);
+    }
+
+
+    /**
+     * 导出
+     * @RequestMapping(path="excel")
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/28
+     * Time: 11:03
+     */
+    public function excel()
+    {
+        return $this->excelView($this);
+    }
+
+    /**
+     * 查询数据处理，格式化组合为导出格式
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/7/28
+     * Time: 11:31
+     * @param $data
+     * @return array
+     */
+    public function excelDataInit($data)
+    {
+        $rows = [];
+
+        $rows[0] = ['ID','创建时间'];
+
+        foreach ($data as $v)
+        {
+            $row = [];
+
+            $row[] = $this->arrIsKey($v,'id');
+            $row[] = date('Y-m-d H:i:s',strtotime($this->arrIsKey($v,'created_at')));
+
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
+
+    /**
+     * @RequestMapping(path="delete")
+     * Created by PhpStorm.
+     * User: EricPan
+     * Date: 2020/8/25
+     * Time: 13:20
+     */
+    public function delete()
+    {
+        $id = (int)$this->request->input('id');
+        // 删除
+        {model}::query()->where('id',$id)->delete();
+        $this->setToastr('删除成功');
+        // 返回首页
+        return $this->response->redirect($this->getUrl($this->fPath));
+    }
+}
