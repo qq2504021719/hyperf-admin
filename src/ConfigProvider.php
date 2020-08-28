@@ -42,6 +42,13 @@ class ConfigProvider
                     'source' => __DIR__ . '/../publish/HyperfAdminCommand.php',  // 对应的配置文件路径
                     'destination' => BASE_PATH . '/app/Command/HyperfAdminCommand.php', // 复制为这个路径下的该文件
                 ],
+                [
+                    'id' => 'migrations',
+                    'description' => '迁移文件发布成功.', // 描述
+                    // 建议默认配置放在 publish 文件夹中，文件命名和组件名称相同
+                    'source' => __DIR__ . '/../publish/migrations/2020_07_16_102104_create_hyperf_admin_users.php',  // 对应的配置文件路径
+                    'destination' => BASE_PATH . '/migrations/2020_07_16_102104_create_hyperf_admin_users.php', // 复制为这个路径下的该文件
+                ],
             ],
         ];
     }

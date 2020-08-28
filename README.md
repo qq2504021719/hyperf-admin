@@ -4,7 +4,7 @@ composer require pl/hyperf-admin
 
 ```
 
-# 扩展包
+## 扩展包
 #### [导出配置教程](https://blog.csdn.net/qq_29755359/article/details/104575938)
 #### [session配置教程](https://hyperf.wiki/2.0/#/zh-cn/session)
 #### [视图配置教程](https://hyperf.wiki/2.0/#/zh-cn/view)
@@ -60,16 +60,6 @@ return [
 ];
 ```
 
-#### 迁移文件 
-```
-2020_07_16_102104_create_hyperf_admin_users
-```
-
-#### 数据库填充内容
-```SQL
-INSERT INTO `hyperf_admin_users` (`id`, `username`, `password`, `name`, `avatar`, `created_at`, `updated_at`) VALUES ('1', 'admin', 'BOa24Yjd71KPvZWVTyIYGg==', 'admin', 'http://hyperf-admin.it/public/upload/15966093203947.png', '2020-08-05 13:58:08', '2020-08-05 14:35:22');
-```
-
 #### 默认后台地址
 ```
 http://xxxx.xxx.xxx/admin/auth
@@ -80,6 +70,11 @@ http://xxxx.xxx.xxx/admin/auth
 ## 发布配置文件
 ```
 php bin/hyperf.php vendor:publish pl/hyperf-admin
+```
+
+#### 数据库填充内容
+```SQL
+INSERT INTO `hyperf_admin_users` (`id`, `username`, `password`, `name`, `avatar`, `created_at`, `updated_at`) VALUES ('1', 'admin', 'BOa24Yjd71KPvZWVTyIYGg==', 'admin', 'http://hyperf-admin.it/public/upload/15966093203947.png', '2020-08-05 13:58:08', '2020-08-05 14:35:22');
 ```
 
 ## 执行(更新代码)
