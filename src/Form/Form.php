@@ -110,36 +110,32 @@ class Form extends HyperfAdmin
      */
     private function dataInit()
     {
-        // 编辑的状态才查询数据、初始化
-        if($this->isVerify === false)
+        $id = $this->request->input('id','');
+
+        // 编辑的状态查数据库数据
+        if($this->met === StateRepository::FORM_EDIT)
         {
-            $id = $this->request->input('id','');
+            $data = $this->model->where('id',$id)->first();
+        }
+        // 编辑保存
+        else if($this->met === StateRepository::FORM_EDIT_SAVE)
+        {
+            $data = $this->model->where('id',$id)->first();
+        }
+        else if($this->met === StateRepository::FORM_ADD_SAVE)
+        {
+            $data = $this->request->all();
+        }
+        // 添加的状态从参数获取
 
-            // 编辑的状态查数据库数据
-            if($this->met === StateRepository::FORM_EDIT)
+        if($data)
+        {
+            foreach ($this->fileds as $v)
             {
-                $data = $this->model->where('id',$id)->first();
-            }
-            // 编辑保存
-            else if($this->met === StateRepository::FORM_EDIT_SAVE)
-            {
-                $data = $this->model->where('id',$id)->first();
-            }
-            else if($this->met === StateRepository::FORM_ADD_SAVE)
-            {
-                $data = $this->request->all();
-            }
-            // 添加的状态从参数获取
-
-            if($data)
-            {
-                foreach ($this->fileds as $v)
+                $fieldData = $this->arrIsKey($data,$v);
+                if($fieldData)
                 {
-                    $fieldData = $this->arrIsKey($data,$v);
-                    if($fieldData)
-                    {
-                        $this->forms[$v]->data = $fieldData;
-                    }
+                    $this->forms[$v]->data = $fieldData;
                 }
             }
         }
