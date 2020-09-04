@@ -1,6 +1,6 @@
 <div class="form-group row">
-    <label class="col-sm-1 col-form-label">{{$label}}</label>
-    <div class="col-sm-11">
+    <label class="col-sm-{{$labelCol}} col-form-label">{{$label}}</label>
+    <div class="col-sm-{{$inputCol}}">
         <input type="{{$inputType}}" class="custom-file-input form-control @if($errorStr) is-invalid @endif" id="{{$name}}uploadFile" >
         <input name="{{$name}}" type="hidden" value="{{$valueData}}" id="{{$name}}uploadFile-value">
         @if($errorStr)

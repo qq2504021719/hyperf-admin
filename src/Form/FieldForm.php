@@ -42,6 +42,16 @@ class FieldForm
      * @var string
      */
     public $label = '';
+    /**
+     * 标题长度
+     * @var int
+     */
+    public $labelCol = 2;
+    /**
+     * input框长度
+     * @var int
+     */
+    public $inputCol = 10;
 
     /**
      * 输入框类型
@@ -243,6 +253,8 @@ class FieldForm
         $data['isRequest'] = $this->isRequest;
         $data['help'] = $this->help;
         $data['inputType'] = $this->inputType;
+        $data['labelCol'] = $this->labelCol;
+        $data['inputCol'] = $this->inputCol;
         return $data;
     }
 

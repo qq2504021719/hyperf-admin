@@ -1,7 +1,7 @@
 
 <div class="form-group row">
-    <label class="col-sm-1 col-form-label" for="exampleInputEmail1">{{$label}}</label>
-    <div class="col-sm-11">
+    <label class="col-sm-{{$labelCol}} col-form-label" for="exampleInputEmail1">{{$label}}</label>
+    <div class="col-sm-{{$inputCol}}">
         <input type="{{$inputType}}" id="select2-input-{{$name}}" name="{{$name}}" value="{{$data}}">
         <select class="form-control @if($errorStr) is-invalid @endif select2{{$name}}" style="width: 100%;">
             @if(count($option))
