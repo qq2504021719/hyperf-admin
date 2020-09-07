@@ -5,6 +5,9 @@ composer require pl/hyperf-admin
 ```
 
 ## 扩展包
+
+> 不必须是在`发布配置文件`这一步已经发布了这些的配置文件。
+
 #### [导出配置教程(必许)](https://blog.csdn.net/qq_29755359/article/details/104575938)
 #### [session配置教程(不必许)](https://hyperf.wiki/2.0/#/zh-cn/session)
 #### [Task配置教程(不必许)](https://hyperf.wiki/2.0/#/zh-cn/task)
