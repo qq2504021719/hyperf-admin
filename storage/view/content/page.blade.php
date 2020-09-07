@@ -40,7 +40,7 @@
                 @endfor
 
                 {{--页尾跳转--}}
-                @if($pageHtml->pageNum-2 > $pageHtml->page)
+                @if($pageHtml->pageNum-(2+$pageHtml->step) > $pageHtml->page)
                     <li class="paginate_button page-item">
                         <a href="javascript:void(0)" class="page-link">...</a>
                     </li>
