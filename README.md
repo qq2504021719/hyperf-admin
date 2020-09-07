@@ -5,11 +5,11 @@ composer require pl/hyperf-admin
 ```
 
 ## 扩展包
-#### [导出配置教程](https://blog.csdn.net/qq_29755359/article/details/104575938)
-#### [session配置教程](https://hyperf.wiki/2.0/#/zh-cn/session)
-#### [视图配置教程](https://hyperf.wiki/2.0/#/zh-cn/view)
-#### [Task配置教程](https://hyperf.wiki/2.0/#/zh-cn/task)
-#### [validation验证器配置教程](https://hyperf.wiki/2.0/#/zh-cn/validation)
+#### [导出配置教程(必许)](https://blog.csdn.net/qq_29755359/article/details/104575938)
+#### [session配置教程(不必许)](https://hyperf.wiki/2.0/#/zh-cn/session)
+#### [Task配置教程(不必许)](https://hyperf.wiki/2.0/#/zh-cn/task)
+#### [视图配置教程(不必许)](https://hyperf.wiki/2.0/#/zh-cn/view)
+#### [validation验证器配置教程(不必许)](https://hyperf.wiki/2.0/#/zh-cn/validation)
 
 ## 配置
 
@@ -53,6 +53,12 @@ storage/download/excel/
 return [
     'settings' => [
         ...
+        
+        // Task Worker 数量，根据您的服务器配置而配置适当的数量
+        'task_worker_num' => 8,
+        // 因为 `Task` 主要处理无法协程化的方法，所以这里推荐设为 `false`，避免协程下出现数据混淆的情况
+        'task_enable_coroutine' => false,
+        
         // 静态资源
         'document_root' => BASE_PATH . '/public',
         'enable_static_handler' => true,
@@ -69,7 +75,10 @@ http://xxxx.xxx.xxx/admin/auth
 
 ## 发布配置文件
 ```
+# 基础配置文件(包含session、task、视图、验证器的配置)
 php bin/hyperf.php vendor:publish pl/hyperf-admin
+# 验证器语言文件
+php bin/hyperf.php vendor:publish hyperf/validation
 ```
 
 #### 数据库填充内容
